@@ -1,10 +1,10 @@
 import React from "react";
 import "../App.css"
-import { NavLink, useNavigate } from "react-router-dom";
 
 
 
-function Signin(){
+
+function Login(){
 
  return(
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -18,18 +18,14 @@ function Signin(){
       </div>
 
       <div className="sm:w-1/2 px-8">
-        <h2 className="font-bold text-2xl">sign up to leNkap</h2>
-        <p className="text-sm mt-4">
-          are you already a member?{''}, 
-          <NavLink to='login'> Login </NavLink> 
-
-        </p>
+        <h2 className="font-bold text-2xl">Welcome back to LeNkap! login</h2>
+       
 
         <form action="" className="flex flex-col gap-4">
-          <input className="p-2 mt-8 rounded-xl border" type="text" name="name" placeholder=" John Doe"/>
-          <input className="p-2 rounded-xl border" type="email" name="email" placeholder="name@email.com"/>
+         
+          <input className="p-2 rounded-xl border mt-8" type="email" name="email" placeholder="name@email.com"/>
           <input className=" p-2 rounded-xl border"type="password" name="password" placeholder="password"/>
-          <button className="bg-[#002487] rounded-xl text-white p-2"> SignUp</button>
+          <button className="bg-[#002487] rounded-xl text-white p-2"> Log in</button>
         </form>
 
         <div></div>
@@ -40,4 +36,4 @@ function Signin(){
  )
 }
 
-export default Signin
+export default Login
