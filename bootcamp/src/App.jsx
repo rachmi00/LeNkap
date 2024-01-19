@@ -2,8 +2,9 @@ import React from 'react'
 
 
 import './App.css'
-import Signin from './components/Signin'
+import Signup from './components/Signup'
 import Login from './components/Login'
+import Home from './components/Home'
 import {BrowserRouter as Router, Routes,Route } from 'react-router-dom'
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
       <div>
         <section>
           <Routes>
-           <Route path='/signup' element={<Signin/>} />
+            <Route path='/' element={<Home/>}></Route>
+           <Route path='/signup' element={<Signup/>} />
            <Route path='/login' element={<Login/>} />
           </Routes>
         </section>

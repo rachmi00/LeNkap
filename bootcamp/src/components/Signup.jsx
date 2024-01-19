@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 
 
-function Signin(){
+function Signup(){
 
  return(
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -20,8 +20,8 @@ function Signin(){
       <div className="sm:w-1/2 px-8">
         <h2 className="font-bold text-2xl">sign up to leNkap</h2>
         <p className="text-sm mt-4">
-          are you already a member?{''}, 
-          <NavLink to='login'> Login </NavLink> 
+          are you already a member?
+          <NavLink to='/login'> <span className="text-blue-300 font-bold">Login </span></NavLink> 
 
         </p>
 
@@ -40,4 +40,4 @@ function Signin(){
  )
 }
 
-export default Signin
+export default Signup

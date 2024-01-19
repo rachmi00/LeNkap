@@ -1,5 +1,6 @@
 import React from "react";
 import "../App.css"
+import { NavLink } from "react-router-dom";
 
 
 
@@ -19,7 +20,11 @@ function Login(){
 
       <div className="sm:w-1/2 px-8">
         <h2 className="font-bold text-2xl">Welcome back to LeNkap! login</h2>
-       
+        <p className="text-sm mt-4">
+          No account yet?{''}
+          <NavLink to='/signup'> <span className="text-blue-300 font-bold">Sign up </span></NavLink> 
+
+        </p>
 
         <form action="" className="flex flex-col gap-4">
          
