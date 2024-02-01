@@ -4,10 +4,10 @@ import DateComponent from "./DateComponent";
 import { CalendarIcon } from '@heroicons/react/solid';
 import BottomNavBar from "./BottomNavBar";
 import Calculator from "./Calculator";
-import CategorySelector from "./AddTransaction";
 
 
-function Home(){
+
+function AddTransaction(){
 
   
 
@@ -26,12 +26,10 @@ function Home(){
      <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Income:</p>
      </section>
     </div>
-    <div className="flex justify-center items-center h-screen"><NavLink to = {'/signup'}><button className="bg-blue-300 rounded p-2 mt-8 text-white ">click here to get started</button></NavLink></div>
-    <BottomNavBar/>
-   
+   <Calculator/>
   </div>
 </main>
     
    )
 }
-export default Home
+export default AddTransaction
