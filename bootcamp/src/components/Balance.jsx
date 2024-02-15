@@ -4,13 +4,12 @@ import { GlobalContext } from "../context/GlobalState";
 function Balance() {
 
     const  { transactions } = useContext(GlobalContext)
+    //get amounts from transactions array
     const amounts = transactions.map(transaction => parseFloat((transaction.amount)))
 
-    console.log(amounts)
-
+    //get the sum of the amounts using the reduce function
     const total = amounts.reduce((acc, item) => acc + item).toFixed(2)
 
-    console.log("total:",total)
     return(
     <>
     <h1>
