@@ -7,12 +7,15 @@ import Login from './components/Login'
 import Home from './components/Home'
 import AddTransaction from './components/AddTransaction'
 import {BrowserRouter as Router, Routes,Route } from 'react-router-dom'
+import Category from './components/Category'
+import { GlobalProvider } from './context/GlobalState'
 
 function App() {
 
 
   return (
-    <Router>
+    <GlobalProvider>
+       <Router>
       <div>
         <section>
           <Routes>
@@ -20,10 +23,13 @@ function App() {
            <Route path='/signup' element={<Signup/>} />
            <Route path='/login' element={<Login/>} />
            <Route path='/add' element={<AddTransaction/>}></Route>
+           <Route path='/category' element = {<Category/>}/>
           </Routes>
         </section>
       </div>
     </Router>
+    </GlobalProvider>
+   
   )
 }
 

@@ -10,9 +10,10 @@ function BottomNavBar() {
                     <a href="#" className="text-gray-600 mr-4">
                         <SearchIcon className="h-6 w-6" />
                     </a>
-                <a href="#" className="text-gray-600 mr-4">
+                <NavLink to ={'/category'} className="mr-4">
                         <FolderIcon className="h-6 w-6" />
-                    </a>
+                    
+                </NavLink>
                 <a href="#" className="text-gray-600 mr-4">
                         <ChartBarIcon className="h-6 w-6" />
                     </a>

@@ -3,8 +3,11 @@ import { NavLink } from "react-router-dom";
 import DateComponent from "./DateComponent";
 import { CalendarIcon } from '@heroicons/react/solid';
 import BottomNavBar from "./BottomNavBar";
-import Calculator from "./Calculator";
+
 import CategorySelector from "./AddTransaction";
+import Expense from "./Expense";
+import Income from "./Income";
+import TransactionList from "./TransactionList";
 
 
 function Home(){
@@ -22,12 +25,19 @@ function Home(){
      </section>
      <h1 className="text-2xl mx-4 font-bold text-white mt-1 sm:text-slate-900 md:text-2xl dark:sm:text-white">Hello</h1>
      <section className="mx-4 mb-5">
-     <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Expense:</p>
-     <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Income:</p>
+     
+     <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Expense: <Expense/></p>
+     <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Income: <Income/></p>
      </section>
     </div>
+    <section>
+    <TransactionList/>
     <div className="flex justify-center items-center h-screen"><NavLink to = {'/signup'}><button className="bg-blue-300 rounded p-2 mt-8 text-white ">click here to get started</button></NavLink></div>
+    
+    </section>
+    
     <BottomNavBar/>
+   
    
   </div>
 </main>
