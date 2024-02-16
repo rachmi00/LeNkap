@@ -9,7 +9,7 @@ function TransactionList(){
 
     return(
        <div>
-         <h3>History</h3>
+         <h3 className="text-2xl font-bold text-blue-400 mb-4 mx-4 mt-4">History</h3>
         <ul >
             {transactions.map(transaction =>(<Transaction key={transaction.id} transaction={transaction}/>))}
             

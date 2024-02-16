@@ -5,11 +5,7 @@ import AppReducer from './AppReducer'
 
 
 const initialState = {
-    transactions: [
-        {id: 1, text: 'cakes', amount: 2600},
-        {id: 2, text: 'maniPedi', amount: 2000},
-        {id: 3, text: 'gummies', amount: -270},
-        {id: 4, text: 'cookies', amount: -900}
+    transactions: [   
     ]
 }
 

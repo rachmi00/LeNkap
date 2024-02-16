@@ -8,7 +8,7 @@ function Balance() {
     const amounts = transactions.map(transaction => parseFloat((transaction.amount)))
 
     //get the sum of the amounts using the reduce function
-    const total = amounts.reduce((acc, item) => acc + item).toFixed(2)
+    const total = amounts.reduce((acc, item) => acc + item, 0).toFixed(2)
 
     return(
     <>
