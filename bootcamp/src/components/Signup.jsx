@@ -1,10 +1,35 @@
 import React from "react";
 import "../App.css"
 import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 
 
 function Signup(){
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [number, setNumber] = useState('')
+
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+
+    const formData ={name, email, password, number};
+    try {
+      const response = await axios.post('https://le-nkap-v1.onrender.com/users', formData,{mode:'cors'});
+    
+      console.log(response.data);
+    }
+    catch(error){
+      console.error(error)
+    }
+    navigate('/')
+  }
 
  return(
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -25,11 +50,13 @@ function Signup(){
 
         </p>
 
-        <form action="" className="flex flex-col gap-4">
-          <input className="p-2 mt-8 rounded-xl border" type="text" name="name" placeholder=" John Doe"/>
-          <input className="p-2 rounded-xl border" type="email" name="email" placeholder="name@email.com"/>
-          <input className=" p-2 rounded-xl border"type="password" name="password" placeholder="password"/>
-          <button className="bg-[#002487] rounded-xl text-white p-2"> SignUp</button>
+        <form action="" className="flex flex-col gap-4 " onSubmit={handleSubmit}>
+          <input className="p-2 mt-8 rounded-xl border" type="text" name="name" placeholder=" John Doe" value={name} onChange={(e)=>setName(e.target.value)}/>
+          <input className="p-2 rounded-xl border" type="email" name="email" placeholder="name@email.com..." value={email} onChange={(e)=>setEmail(e.target.value)}/>
+          <input className=" p-2 rounded-xl border"type="password" name="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+          <input className=" p-2 rounded-xl border"type="password" name="password confirm" placeholder=" confirm password" value={passwordConfirmation} onChange={(e)=>setPasswordConfirmation(e.target.value)}/>
+          <input className=" p-2 rounded-xl border"type="number" name="number" placeholder="phone number..." value={number} onChange={(e)=>setNumber(e.target.value)}/>
+          <button className="bg-[#002487] rounded-xl text-white p-2" type="submit"> SignUp</button>
         </form>
 
         <div></div>

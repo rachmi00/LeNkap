@@ -10,17 +10,14 @@ function BottomNavBar() {
                     <a href="#" className="text-gray-600 mr-4">
                         <SearchIcon className="h-6 w-6" />
                     </a>
-                <NavLink to ={'/category'} className="mr-4">
-                        <FolderIcon className="h-6 w-6" />
+                <NavLink to ={'/signup'} className="mr-4">
+                        <UserIcon className="h-6 w-6" />
                     
                 </NavLink>
                 <a href="#" className="text-gray-600 mr-4">
                         <ChartBarIcon className="h-6 w-6" />
                     </a>
                    
-                    <a href="#" className="text-gray-600 mr-4">
-                        <UserIcon className="h-6 w-6" />
-                    </a>
                     
                 </div>
                <NavLink to={'/add'}> <button className="bg-blue-500 text-white w-14 h-14 rounded-full">

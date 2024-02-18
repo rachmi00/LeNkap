@@ -21,7 +21,7 @@ function Home(){
   <div className=" ">
     <div className=" h-34 grid gap-4 col-start-1 col-end-3 row-start-1 sm:mb-6 sm:grid-cols-4 lg:gap-6 lg:col-start-2 lg:row-end-6 lg:row-span-6 lg:mb-0 bg-blue-400 rounded ">
      <section className="flex mt-1 mx-3">
-       <span className="text-white"> <CalendarIcon className="h-6 w-6" /></span> <DateComponent/>
+       <span className="text-white"> <CalendarIcon className="h-6 w-6" /></span> <DateComponent/> 
      </section>
      <h1 className="text-2xl mx-4 font-bold text-white mt-1 sm:text-slate-900 md:text-2xl dark:sm:text-white">Hello</h1>
      <section className="mx-4 mb-5">

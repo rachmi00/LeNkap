@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../App.css"
 import { NavLink } from "react-router-dom";
 
@@ -6,6 +6,16 @@ import { NavLink } from "react-router-dom";
 
 
 function Login(){
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+
+    const formData ={ email, password};
+    console.log(formData);
+  }
 
  return(
     <section className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -26,11 +36,11 @@ function Login(){
 
         </p>
 
-        <form action="" className="flex flex-col gap-4">
+        <form action="" className="flex flex-col gap-4" onSubmit={handleSubmit}>
          
-          <input className="p-2 rounded-xl border mt-8" type="email" name="email" placeholder="name@email.com"/>
-          <input className=" p-2 rounded-xl border"type="password" name="password" placeholder="password"/>
-          <button className="bg-[#002487] rounded-xl text-white p-2"> Log in</button>
+          <input className="p-2 rounded-xl border mt-8" type="email" name="email" placeholder="name@email.com" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+          <input className=" p-2 rounded-xl border"type="password" name="password" placeholder="password" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+          <button className="bg-[#002487] rounded-xl text-white p-2" type="submit"> Log in</button>
         </form>
 
         <div></div>
