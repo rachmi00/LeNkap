@@ -62,7 +62,7 @@ function Home(){
             <div className="flex justify-center items-center ">
              
              {
-              isVisible &&  <button className="bg-blue-300 rounded p-2 mt-8 text-white" onClick={hideButton}>Click here to get started</button>
+              isVisible &&  <button className="bg-blue-300 rounded p-2 mt-8 text-white" onClick={hideButton}>Click here to get started!</button>
              }
               
             </div>
