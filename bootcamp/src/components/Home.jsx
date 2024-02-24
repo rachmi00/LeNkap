@@ -1,19 +1,46 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import DateComponent from "./DateComponent";
 import { CalendarIcon } from '@heroicons/react/solid';
 import BottomNavBar from "./BottomNavBar";
 
-import CategorySelector from "./AddTransaction";
+
 import Expense from "./Expense";
 import Income from "./Income";
 import TransactionList from "./TransactionList";
+import axios from "axios";
 
 
 function Home(){
+  
+  const history = useNavigate();
+  const isVisibleStored = localStorage.getItem("isButtonVisible");
+  const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true);
 
+
+
+  useEffect(() => {
+    // If the button is hidden, set it to visible after 10 seconds
+    if (!isVisible) {
+      const timeout = setTimeout(() => {
+        setIsVisible(true);
+        localStorage.setItem("isButtonVisible", "true");
+      }, 10000);
+
+      // Clean up the timeout when the component unmounts
+      return () => clearTimeout(timeout);
+    }
+  }, [isVisible]);
+  
+  
+  const hideButton = () => {
+    setIsVisible(false);
+    localStorage.setItem("isButtonVisible", "false");
+    history('/signup');
+  }
   
 
+  
 
    return(
     
@@ -23,7 +50,7 @@ function Home(){
      <section className="flex mt-1 mx-3">
        <span className="text-white"> <CalendarIcon className="h-6 w-6" /></span> <DateComponent/> 
      </section>
-     <h1 className="text-2xl mx-4 font-bold text-white mt-1 sm:text-slate-900 md:text-2xl dark:sm:text-white">Hello</h1>
+     <h1 className="text-2xl mx-4 font-bold text-white mt-1 sm:text-slate-900 md:text-2xl dark:sm:text-white">Hello Le Nkap User</h1>
      <section className="mx-4 mb-5">
      
      <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Expense: <Expense/></p>
@@ -32,7 +59,14 @@ function Home(){
     </div>
     <section>
     <TransactionList/>
-    <div className="flex justify-center items-center h-screen"><NavLink to = {'/signup'}><button className="bg-blue-300 rounded p-2 mt-8 text-white ">click here to get started</button></NavLink></div>
+            <div className="flex justify-center items-center ">
+             
+             {
+              isVisible &&  <button className="bg-blue-300 rounded p-2 mt-8 text-white" onClick={hideButton}>Click here to get started</button>
+             }
+              
+            </div>
+          
     
     </section>
     

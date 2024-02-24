@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../App.css"
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 
@@ -9,12 +10,24 @@ function Login(){
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = async(e) =>{
     e.preventDefault();
 
     const formData ={ email, password};
-    console.log(formData);
+   
+
+    try{
+      const response = await axios.post('https://le-nkap-v1.onrender.com/auth', formData);
+      const {token} = response.data
+      localStorage.setItem('token', token);
+      console.log(response.data);
+    }
+    catch(error){
+      console.error(error);
+    }
+    navigate('/')
   }
 
  return(

@@ -12,7 +12,7 @@ function Transaction({transaction}){
       <li className="flex items-center justify-between border border-gray-300 shadow-md p-3 rounded-lg mb-4 ">
      <div className="flex items-center border-b py-2">
   <div className="flex-grow">
-    <span className="mr-4 text-lg font-semibold">{transaction.text}</span>
+    <span className="mr-4 text-lg font-semibold">{transaction.name}</span>
     <span className={`text-${sign === '+' ? 'green' : 'red'}-500 text-lg font-semibold`}>{sign}FCFA{Math.abs(transaction.amount)}</span>
   </div>
   <div>

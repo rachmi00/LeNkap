@@ -1,15 +1,18 @@
-import React, { useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
-import {  HomeIcon } from "@heroicons/react/solid";
+import { HomeIcon } from "@heroicons/react/solid";
 import { GlobalContext } from "../context/GlobalState";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function AddTransaction() {
-  const [text, setText] = useState("");
+
+  const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
+  const [type, setType] = useState('');
   const [showPopup, setShowPopup] = useState(false);
   const history = useNavigate();
 
@@ -27,12 +30,32 @@ function AddTransaction() {
     setCategoryName("");
   };
 
-  const onSubmitTransaction = (e) => {
+  const onSubmitTransaction = async (e) => {
     e.preventDefault();
+
+    const formDatas = { name, amount, categoryId, type };
+    const authToken = localStorage.getItem('token');
+
+    
+    try {
+      const response = await axios.post('https://le-nkap-v1.onrender.com/transactions', formDatas, 
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Assuming you store the token in localStorage
+          }},);
+      
+      
+
+      console.log(response.data);
+    }
+    catch (error) {
+      console.error(error)
+    }
+    
 
     const newTransaction = {
       id: Math.floor(Math.random() * 100000000),
-      text,
+      name,
       amount: +amount,
       category: categories.find((cat) => cat.id === parseInt(categoryId)),
     };
@@ -42,7 +65,7 @@ function AddTransaction() {
     setShowPopup(true);
 
     // Clear form fields
-    setText("");
+    setName("");
     setAmount("");
     setCategoryId("");
 
@@ -51,6 +74,7 @@ function AddTransaction() {
       setShowPopup(false);
       history("/");
     }, 1000); // 1000 milliseconds = 1 second
+
   };
 
   return (
@@ -60,7 +84,7 @@ function AddTransaction() {
           <section className="flex mt-1 mx-3"></section>
 
           <section className=" flex justify-center mx-4 mb-5">
-            
+
             <NavLink to={"/"} className="mr-4 text-white">
               <HomeIcon className="h-6 w-6" />
             </NavLink>
@@ -76,6 +100,32 @@ function AddTransaction() {
               </div>
             </div>
           )}
+           <div className="w-full sm:max-w-md bg-white p-6 rounded-md shadow-md mt-8">
+            <h3 className="text-lg font-semibold mb-4">Add new category</h3>
+            <form onSubmit={onSubmitCategory} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="categoryName"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Category name
+                </label>
+                <input
+                  type="text"
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                  placeholder="Enter category name..."
+                  className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                Add Category
+              </button>
+            </form>
+          </div>
           <div className="w-full sm:max-w-md bg-white p-6 rounded-md shadow-md">
             <h3 className="text-lg font-semibold mb-4">Add new transaction</h3>
             <form onSubmit={onSubmitTransaction} className="space-y-4">
@@ -88,11 +138,16 @@ function AddTransaction() {
                 </label>
                 <input
                   type="text"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder="Enter text..."
                   className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />
+              </div>
+              <div>
+                <label htmlFor="type" className="block text-md font-mediun text-gray-700"> Type</label>
+              <input type="text" name="type" value={type}  onChange={(e)=>setType(e.target.value)} placeholder="income or expense?"
+                 className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"/>
               </div>
               <div>
                 <label
@@ -131,6 +186,7 @@ function AddTransaction() {
                     </option>
                   ))}
                 </select>
+
               </div>
               <button
                 type="submit"
@@ -140,32 +196,7 @@ function AddTransaction() {
               </button>
             </form>
           </div>
-          <div className="w-full sm:max-w-md bg-white p-6 rounded-md shadow-md mt-8">
-            <h3 className="text-lg font-semibold mb-4">Add new category</h3>
-            <form onSubmit={onSubmitCategory} className="space-y-4">
-              <div>
-                <label
-                  htmlFor="categoryName"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Category name
-                </label>
-                <input
-                  type="text"
-                  value={categoryName}
-                  onChange={(e) => setCategoryName(e.target.value)}
-                  placeholder="Enter category name..."
-                  className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Add Category
-              </button>
-            </form>
-          </div>
+         
         </div>
       </div>
     </main>
