@@ -7,14 +7,14 @@ function BottomNavBar() {
         <div className="fixed bottom-0 left-0 w-full bg-white p-4 border-t border-gray-300 shadow-lg">
             <div className="flex justify-between items-center">
                 <div className="flex">
-                    <a href="#" className="text-gray-600 mr-4">
+                    <a href="#" className="text-gray-600 mr-5">
                         <SearchIcon className="h-6 w-6" />
                     </a>
                 <NavLink to ={'/signup'} className="mr-4">
                         <UserIcon className="h-6 w-6" />
                     
                 </NavLink>
-                <NavLink to ={'/dash'}  className=" mr-4">
+                <NavLink to ={'/dash'}  className=" bold mr-4">
                         <ChartBarIcon className="h-6 w-6" />
                     </NavLink>
                    
