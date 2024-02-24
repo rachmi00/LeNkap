@@ -25,7 +25,7 @@ function Home(){
       const timeout = setTimeout(() => {
         setIsVisible(true);
         localStorage.setItem("isButtonVisible", "true");
-      }, 10000);
+      }, 600000);
 
       // Clean up the timeout when the component unmounts
       return () => clearTimeout(timeout);

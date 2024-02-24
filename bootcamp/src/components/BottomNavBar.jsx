@@ -14,9 +14,9 @@ function BottomNavBar() {
                         <UserIcon className="h-6 w-6" />
                     
                 </NavLink>
-                <a href="#" className="text-gray-600 mr-4">
+                <NavLink to ={'/chart'}  className=" mr-4">
                         <ChartBarIcon className="h-6 w-6" />
-                    </a>
+                    </NavLink>
                    
                     
                 </div>

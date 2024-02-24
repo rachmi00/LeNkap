@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext , useEffect} from "react";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "@heroicons/react/solid";
 import { GlobalContext } from "../context/GlobalState";
@@ -18,6 +18,7 @@ function AddTransaction() {
 
   const { addTransaction } = useContext(GlobalContext);
 
+
   const onSubmitCategory = (e) => {
     e.preventDefault();
 
@@ -27,7 +28,7 @@ function AddTransaction() {
     };
 
     setCategories([...categories, newCategory]);
-    setCategoryName("");
+    setCategoryName('');
   };
 
   const onSubmitTransaction = async (e) => {
