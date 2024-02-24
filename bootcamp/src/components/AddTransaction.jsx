@@ -18,6 +18,16 @@ function AddTransaction() {
 
   const { addTransaction } = useContext(GlobalContext);
 
+  useEffect(() => {
+    // Initialize categories with default values
+    setCategories([
+      { id: 1, name: "Food" },
+      { id: 2, name: "Transportation" },
+      { id: 3, name: "Utilities" },
+      {id:33, name: "Clothes"},
+    ]);
+  }, []);
+
 
   const onSubmitCategory = (e) => {
     e.preventDefault();

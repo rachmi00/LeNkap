@@ -9,7 +9,8 @@ import AddTransaction from './components/AddTransaction'
 import {BrowserRouter as Router, Routes,Route } from 'react-router-dom'
 
 import { GlobalProvider } from './context/GlobalState'
-import ExpensePieChart from './components/ExpensePieChart.jsx'
+
+import Dashboard from './components/Dashboard.jsx'
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
            <Route path='/signup' element={<Signup/>} />
            <Route path='/login' element={<Login/>} />
            <Route path='/add' element={<AddTransaction/>}></Route>
-          <Route path='/chart' element={<ExpensePieChart/>}></Route>
+          <Route path='/dash' element={<Dashboard/>}></Route>
           </Routes>
         </section>
       </div>
