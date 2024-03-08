@@ -50,11 +50,11 @@ function Home(){
      <section className="flex mt-1 mx-3">
        <span className="text-white"> <CalendarIcon className="h-6 w-6" /></span> <DateComponent/> 
      </section>
-     <h1 className="text-2xl mx-4 font-bold text-white mt-1 sm:text-slate-900 md:text-2xl dark:sm:text-white">Hello Le Nkap User</h1>
+     <h1 className="text-2xl mx-4 font-bold text-white mt-1 sm:text-white-900 md:text-2xl dark:sm:text-white">Hello Le Nkap User</h1>
      <section className="mx-4 mb-5">
      
-     <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Expense: <Expense/></p>
-     <p className="leading-4 font-medium text-white sm:text-slate-500 dark:sm:text-slate-400">Income: <Income/></p>
+     <p className="leading-4 font-medium mt-2 text-white sm:text-white-500 dark:sm:text-white-400">Expense: <Expense/></p>
+     <p className="leading-4 font-medium mt-2 text-white sm:text-white-500 dark:sm:text-white-400">Income: <Income/></p>
      </section>
     </div>
     <section>

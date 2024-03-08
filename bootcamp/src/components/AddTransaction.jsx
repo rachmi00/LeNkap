@@ -89,15 +89,15 @@ function AddTransaction() {
   };
 
   return (
-    <main className="md:py-10 md:px-8">
+    <main className="">
       <div className=" ">
-        <div className=" h-34 grid gap-4 col-start-1 col-end-3 row-start-1 sm:mb-6 sm:grid-cols-4 lg:gap-6 lg:col-start-2 lg:row-end-6 lg:row-span-6 lg:mb-0 bg-blue-400 rounded ">
+        <div className=" h-34 grid gap-4 col-start-1 col-end-3 row-start-1 sm:mb-6 sm:grid-cols-4 lg:gap-6 lg:col-start-3 lg:row-end-4 lg:row-span-8 lg:mb-0 bg-blue-400 rounded ">
           <section className="flex mt-1 mx-3"></section>
 
-          <section className=" flex justify-center mx-4 mb-5">
+          <section className="  flex justify-center items-center mx-4 mb-5">
 
             <NavLink to={"/"} className="mr-4 text-white">
-              <HomeIcon className="h-6 w-6" />
+              <HomeIcon className="h-6 w-6 justify-center items-center" />
             </NavLink>
           </section>
         </div>
