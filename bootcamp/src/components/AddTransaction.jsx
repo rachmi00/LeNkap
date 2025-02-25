@@ -106,7 +106,7 @@ function AddTransaction() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      {/* Fixed header with proper responsive design */}
+{/*       {/* Fixed header with proper responsive design */}
       <header className="sticky top-0 z-50 bg-blue-700 shadow-md">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <h1 className="text-white text-xl font-bold">Financial Tracker</h1>
@@ -118,7 +118,7 @@ function AddTransaction() {
             <span className="ml-2 hidden sm:inline">Home</span>
           </NavLink>
         </div>
-      </header>
+      </header> */}
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
