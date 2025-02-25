@@ -120,8 +120,7 @@ function AddTransaction() {
 
       {/* Main Content Area */}
       <div className="container mx-auto px-4 py-4">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Manage Your Finances</h2>
-        
+  
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Category Card */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
