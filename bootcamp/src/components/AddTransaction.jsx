@@ -107,8 +107,8 @@ function AddTransaction() {
   return (
     <main className="min-h-screen bg-gray-100">
       {/* Compact Header */}
-      <header className="bg-blue-800 shadow-md py-4">
-        <div className="container mx-auto px-4 flex justify-between items-center">
+      <header className="sticky top-0 z-50 shadow-md py-4">
+        <div className="container mx-auto px-4 flex justify-between items-center max-w-7xl">
           <h1 className="text-white text-xl font-bold">Financial Tracker</h1>
           <NavLink
             to="/"
