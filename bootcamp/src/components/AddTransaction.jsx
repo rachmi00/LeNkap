@@ -236,7 +236,7 @@ function AddTransaction() {
                     Amount
                   </label>
                   <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">FCFA</span>
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 pr-5">FCFA</span>
                     <input
                       type="number"
                       id="amount"
