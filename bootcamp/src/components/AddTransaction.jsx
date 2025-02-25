@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { HomeIcon, PlusIcon, CashIcon, TagIcon } from "@heroicons/react/solid";
+import { HomeIcon } from "@heroicons/react/solid";
 import { GlobalContext } from "../context/GlobalState";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,10 +11,9 @@ function AddTransaction() {
   const [categoryId, setCategoryId] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
-  const [type, setType] = useState("expense");
-  const [isLoading, setIsLoading] = useState(false);
+  const [type, setType] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  const navigate = useNavigate();
+  const history = useNavigate();
 
   const { addTransaction } = useContext(GlobalContext);
 
@@ -24,245 +23,170 @@ function AddTransaction() {
       { id: 1, name: "Food" },
       { id: 2, name: "Transportation" },
       { id: 3, name: "Utilities" },
-      { id: 4, name: "Clothes" },
-      { id: 5, name: "Entertainment" },
-      { id: 6, name: "Health" },
+      { id: 33, name: "Clothes" },
     ]);
   }, []);
 
   const onSubmitCategory = (e) => {
     e.preventDefault();
-    
-    if (!categoryName.trim()) {
-      return;
-    }
 
     const newCategory = {
       id: Math.floor(Math.random() * 100000000),
-      name: categoryName.trim(),
+      name: categoryName,
     };
 
     setCategories([...categories, newCategory]);
-    setCategoryName("");
+    setCategoryName('');
   };
 
   const onSubmitTransaction = async (e) => {
     e.preventDefault();
-    
-    if (!name.trim() || !amount || !categoryId || !type) {
-      return;
-    }
-    
-    setIsLoading(true);
 
-    const formData = { 
-      name: name.trim(), 
-      amount: type === "expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount)), 
-      categoryId, 
-      type 
-    };
-    
+    const formDatas = { name, amount, categoryId, type };
+    const authToken = localStorage.getItem('token');
+
     try {
-      const authToken = localStorage.getItem("token");
-      
-      await axios.post(
-        "https://le-nkap-v1.onrender.com/transactions",
-        formData,
+      const response = await axios.post('https://le-nkap-v1.onrender.com/transactions', formDatas,
         {
           headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
+            Authorization: `Bearer ${authToken}`, // Assuming you store the token in localStorage
+          }
+        });
 
-      const newTransaction = {
-        id: Math.floor(Math.random() * 100000000),
-        name: formData.name,
-        amount: formData.amount,
-        category: categories.find((cat) => cat.id === parseInt(categoryId)),
-        type
-      };
-
-      addTransaction(newTransaction);
-      setShowPopup(true);
-
-      // Clear form fields
-      setName("");
-      setAmount("");
-      setCategoryId("");
-      setType("expense");
-
-      // Navigate back to the home screen after a delay
-      setTimeout(() => {
-        setShowPopup(false);
-        navigate("/");
-      }, 1500);
-    } catch (error) {
-      console.error("Error adding transaction:", error);
-    } finally {
-      setIsLoading(false);
+      console.log(response.data);
     }
+    catch (error) {
+      console.error(error)
+    }
+
+    const newTransaction = {
+      id: Math.floor(Math.random() * 100000000),
+      name,
+      amount: +amount,
+      category: categories.find((cat) => cat.id === parseInt(categoryId)),
+    };
+
+    addTransaction(newTransaction);
+
+    setShowPopup(true);
+
+    // Clear form fields
+    setName("");
+    setAmount("");
+    setCategoryId("");
+
+    // Navigate back to the home screen after a delay
+    setTimeout(() => {
+      setShowPopup(false);
+      history("/");
+    }, 1000); // 1000 milliseconds = 1 second
+
   };
 
   return (
-    <main className="min-h-screen bg-gray-100">
-{/*       {/* Fixed header with proper responsive design */}
-      <header className="sticky top-0 z-50 bg-blue-700 shadow-md">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-white text-xl font-bold">Financial Tracker</h1>
-          <NavLink
-            to="/"
-            className="flex items-center text-white hover:text-blue-200 transition-colors"
-          >
-            <HomeIcon className="h-6 w-6" />
-            <span className="ml-2 hidden sm:inline">Home</span>
-          </NavLink>
-        </div>
-      </header> */}
+    <main className="">
+      <div className=" ">
+        <div className=" h-34 grid gap-4 col-start-1 col-end-3 row-start-1 sm:mb-6 sm:grid-cols-4 lg:gap-6 lg:col-start-3 lg:row-end-4 lg:row-span-8 lg:mb-0 bg-blue-400 rounded ">
+          <section className="flex mt-1 mx-3"></section>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Manage Your Finances</h2>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Category Card */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-blue-700 text-white p-4 flex items-center">
-              <TagIcon className="h-5 w-5 mr-2" />
-              <h3 className="text-lg font-semibold">Add New Category</h3>
+          <section className="  flex justify-center items-center mx-4 mb-5">
+
+            <NavLink to={"/"} className="mr-4 text-white">
+              <HomeIcon className="h-6 w-6 justify-center items-center" />
+            </NavLink>
+          </section>
+        </div>
+        <div className="min-h-screen flex flex-col justify-center items-center p-4">
+          {showPopup && (
+            <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-md shadow-md">
+                <p className="text-lg font-semibold mb-4">
+                  Transaction added successfully!
+                </p>
+              </div>
             </div>
-            <div className="p-5">
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl">
+            <div className="bg-white p-6 rounded-md shadow-md">
+              <h3 className="text-lg font-semibold mb-4">Add new category</h3>
               <form onSubmit={onSubmitCategory} className="space-y-4">
                 <div>
                   <label
                     htmlFor="categoryName"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-gray-700"
                   >
-                    Category Name
-                  </label>
+                    Category name
+                </label>
                   <input
                     type="text"
-                    id="categoryName"
                     value={categoryName}
                     onChange={(e) => setCategoryName(e.target.value)}
                     placeholder="Enter category name..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
+                  className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <PlusIcon className="h-5 w-5 mr-1" />
                   Add Category
-                </button>
+              </button>
               </form>
-              
-              {/* Category List */}
-              <div className="mt-6">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Available Categories:</h4>
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((category) => (
-                    <span key={category.id} className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                      {category.name}
-                    </span>
-                  ))}
-                </div>
-              </div>
             </div>
-          </div>
-
-          {/* Transaction Card */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-blue-700 text-white p-4 flex items-center">
-              <CashIcon className="h-5 w-5 mr-2" />
-              <h3 className="text-lg font-semibold">Add New Transaction</h3>
-            </div>
-            <div className="p-5">
+            <div className="bg-white p-6 rounded-md shadow-md">
+              <h3 className="text-lg font-semibold mb-4">Add new transaction</h3>
               <form onSubmit={onSubmitTransaction} className="space-y-4">
                 <div>
                   <label
                     htmlFor="text"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-gray-700"
                   >
-                    Transaction Name
-                  </label>
+                    Transaction name
+                </label>
                   <input
                     type="text"
-                    id="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="What's this transaction for?"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    placeholder="Enter text..."
+                    className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
-                
                 <div>
-                  <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
-                    Transaction Type
-                  </label>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button
-                      type="button"
-                      className={`px-4 py-2 rounded-lg border ${
-                        type === "expense"
-                          ? "bg-red-100 border-red-400 text-red-700"
-                          : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200"
-                      } transition-colors focus:outline-none`}
-                      onClick={() => setType("expense")}
-                    >
-                      Expense
-                    </button>
-                    <button
-                      type="button"
-                      className={`px-4 py-2 rounded-lg border ${
-                        type === "income"
-                          ? "bg-green-100 border-green-400 text-green-700"
-                          : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200"
-                      } transition-colors focus:outline-none`}
-                      onClick={() => setType("income")}
-                    >
-                      Income
-                    </button>
-                  </div>
+                  <label htmlFor="type" className="block text-md font-mediun text-gray-700"> Type</label>
+                  <input type="text" name="type" value={type} onChange={(e) => setType(e.target.value)} placeholder="income or expense?"
+                    className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                 </div>
-
                 <div>
                   <label
                     htmlFor="amount"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-gray-700"
                   >
                     Amount
+                  <span className="text-gray-500 text-xs ml-1">
+                      (negative - expense, positive - income)
+                  </span>
                   </label>
-                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
-                    <input
-                      type="number"
-                      id="amount"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="0.00"
-                      min="0"
-                      step="0.01"
-                      className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                    />
-                  </div>
+                  <input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="Enter amount..."
+                    className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  />
                 </div>
-                
                 <div>
                   <label
                     htmlFor="category"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-sm font-medium text-gray-700"
                   >
                     Category
-                  </label>
+                </label>
                   <select
-                    id="category"
                     value={categoryId}
                     onChange={(e) => setCategoryId(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                   >
-                    <option value="">Select a category...</option>
+                    <option value="">Select category...</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.name}
@@ -270,44 +194,17 @@ function AddTransaction() {
                     ))}
                   </select>
                 </div>
-                
                 <button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
+                  className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {isLoading ? (
-                    <span>Processing...</span>
-                  ) : (
-                    <>
-                      <PlusIcon className="h-5 w-5 mr-1" />
-                      Add Transaction
-                    </>
-                  )}
-                </button>
+                  Add Transaction
+              </button>
               </form>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Success Popup */}
-      {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4 animate-fade-in">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mt-4">Transaction Added</h3>
-              <p className="text-gray-600 mt-2">Your transaction has been successfully recorded.</p>
-              <p className="text-gray-500 text-sm mt-4">Redirecting to home page...</p>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 }
