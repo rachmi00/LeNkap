@@ -106,33 +106,31 @@ function AddTransaction() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-{/*         {/* Fixed header with proper responsive design */}
-        <header className="sticky top-0 z-50 bg-blue-700 shadow-md">
-          <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-            <h1 className="text-white text-xl font-bold">Financial Tracker</h1>
-            <NavLink
-              to="/"
-              className="flex items-center text-white hover:text-blue-200 transition-colors"
-            >
-              <HomeIcon className="h-6 w-6" />
-              <span className="ml-2 hidden sm:inline">Home</span>
-            </NavLink>
-          </div>
-        </header> */}
+      {/* Minimal Navigation Bar */}
+      <div className="bg-blue-800 px-4 py-2 flex justify-between items-center shadow-md">
+        <h1 className="text-white text-lg font-bold">Financial Tracker</h1>
+        <NavLink
+          to="/"
+          className="text-white hover:text-blue-200 transition-colors p-2"
+          aria-label="Home"
+        >
+          <HomeIcon className="h-5 w-5" />
+        </NavLink>
+      </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Manage Your Finances</h2>
+      {/* Main Content Area */}
+      <div className="container mx-auto px-4 py-4">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Manage Your Finances</h2>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Category Card */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-blue-700 text-white p-4 flex items-center">
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-blue-700 text-white p-3 flex items-center">
               <TagIcon className="h-5 w-5 mr-2" />
-              <h3 className="text-lg font-semibold">Add New Category</h3>
+              <h3 className="font-medium">Add New Category</h3>
             </div>
-            <div className="p-5">
-              <form onSubmit={onSubmitCategory} className="space-y-4">
+            <div className="p-4">
+              <form onSubmit={onSubmitCategory} className="space-y-3">
                 <div>
                   <label
                     htmlFor="categoryName"
@@ -146,12 +144,12 @@ function AddTransaction() {
                     value={categoryName}
                     onChange={(e) => setCategoryName(e.target.value)}
                     placeholder="Enter category name..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
+                  className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
                 >
                   <PlusIcon className="h-5 w-5 mr-1" />
                   Add Category
@@ -159,11 +157,11 @@ function AddTransaction() {
               </form>
               
               {/* Category List */}
-              <div className="mt-6">
+              <div className="mt-4">
                 <h4 className="text-sm font-medium text-gray-700 mb-2">Available Categories:</h4>
                 <div className="flex flex-wrap gap-2">
                   {categories.map((category) => (
-                    <span key={category.id} className="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                    <span key={category.id} className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
                       {category.name}
                     </span>
                   ))}
@@ -173,13 +171,13 @@ function AddTransaction() {
           </div>
 
           {/* Transaction Card */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="bg-blue-700 text-white p-4 flex items-center">
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="bg-blue-700 text-white p-3 flex items-center">
               <CashIcon className="h-5 w-5 mr-2" />
-              <h3 className="text-lg font-semibold">Add New Transaction</h3>
+              <h3 className="font-medium">Add New Transaction</h3>
             </div>
-            <div className="p-5">
-              <form onSubmit={onSubmitTransaction} className="space-y-4">
+            <div className="p-4">
+              <form onSubmit={onSubmitTransaction} className="space-y-3">
                 <div>
                   <label
                     htmlFor="text"
@@ -193,7 +191,7 @@ function AddTransaction() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="What's this transaction for?"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </div>
                 
@@ -201,10 +199,10 @@ function AddTransaction() {
                   <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
                     Transaction Type
                   </label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
-                      className={`px-4 py-2 rounded-lg border ${
+                      className={`px-3 py-2 rounded border ${
                         type === "expense"
                           ? "bg-red-100 border-red-400 text-red-700"
                           : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200"
@@ -215,7 +213,7 @@ function AddTransaction() {
                     </button>
                     <button
                       type="button"
-                      className={`px-4 py-2 rounded-lg border ${
+                      className={`px-3 py-2 rounded border ${
                         type === "income"
                           ? "bg-green-100 border-green-400 text-green-700"
                           : "bg-gray-100 border-gray-300 text-gray-700 hover:bg-gray-200"
@@ -244,7 +242,7 @@ function AddTransaction() {
                       placeholder="0.00"
                       min="0"
                       step="0.01"
-                      className="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                     />
                   </div>
                 </div>
@@ -260,7 +258,7 @@ function AddTransaction() {
                     id="category"
                     value={categoryId}
                     onChange={(e) => setCategoryId(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    className="w-full px-3 py-2 border border-gray-300 rounded bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   >
                     <option value="">Select a category...</option>
                     {categories.map((category) => (
@@ -274,7 +272,7 @@ function AddTransaction() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
+                  className="w-full py-2 px-4 bg-blue-700 hover:bg-blue-800 text-white font-medium rounded transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 flex items-center justify-center"
                 >
                   {isLoading ? (
                     <span>Processing...</span>
@@ -294,16 +292,16 @@ function AddTransaction() {
       {/* Success Popup */}
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4 animate-fade-in">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
             <div className="text-center">
-              <div className="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mt-4">Transaction Added</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mt-3">Transaction Added</h3>
               <p className="text-gray-600 mt-2">Your transaction has been successfully recorded.</p>
-              <p className="text-gray-500 text-sm mt-4">Redirecting to home page...</p>
+              <p className="text-gray-500 text-sm mt-3">Redirecting to home page...</p>
             </div>
           </div>
         </div>
