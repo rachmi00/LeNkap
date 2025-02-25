@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { HomeIcon, PlusIcon, CashIcon, TagIcon } from "@heroicons/react/solid";
 import { GlobalContext } from "../context/GlobalState";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function AddTransaction() {
@@ -32,7 +31,7 @@ function AddTransaction() {
 
   const onSubmitCategory = (e) => {
     e.preventDefault();
-    
+
     if (!categoryName.trim()) {
       return;
     }
@@ -48,41 +47,49 @@ function AddTransaction() {
 
   const onSubmitTransaction = async (e) => {
     e.preventDefault();
-    
+
     if (!name.trim() || !amount || !categoryId || !type) {
       return;
     }
-    
+
     setIsLoading(true);
 
-    const formData = { 
-      name: name.trim(), 
-      amount: type === "expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount)), 
-      categoryId, 
-      type 
+    const formData = {
+      name: name.trim(),
+      amount: type === "expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount)),
+      categoryId,
+      type,
     };
-    
+
+    const newTransaction = {
+      id: Math.floor(Math.random() * 100000000),
+      name: formData.name,
+      amount: formData.amount,
+      category: categories.find((cat) => cat.id === parseInt(categoryId)),
+      type,
+    };
+
     try {
       const authToken = localStorage.getItem("token");
-      
-      await axios.post(
-        "https://le-nkap-v1.onrender.com/transactions",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
 
-      const newTransaction = {
-        id: Math.floor(Math.random() * 100000000),
-        name: formData.name,
-        amount: formData.amount,
-        category: categories.find((cat) => cat.id === parseInt(categoryId)),
-        type
-      };
-
+      if (authToken) {
+        // Attempt to send the transaction to the backend
+        await axios.post(
+          "https://le-nkap-v1.onrender.com/transactions",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+      } else {
+        console.warn("No token found. Adding transaction locally.");
+      }
+    } catch (error) {
+      console.error("API call failed. Adding transaction locally:", error);
+    } finally {
+      // Add the transaction to the local state regardless of API success/failure
       addTransaction(newTransaction);
       setShowPopup(true);
 
@@ -97,9 +104,7 @@ function AddTransaction() {
         setShowPopup(false);
         navigate("/");
       }, 1500);
-    } catch (error) {
-      console.error("Error adding transaction:", error);
-    } finally {
+
       setIsLoading(false);
     }
   };
@@ -120,7 +125,6 @@ function AddTransaction() {
 
       {/* Main Content Area */}
       <div className="container mx-auto px-4 py-4">
-  
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Category Card */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -154,7 +158,7 @@ function AddTransaction() {
                   Add Category
                 </button>
               </form>
-              
+
               {/* Category List */}
               <div className="mt-4">
                 <h4 className="text-sm font-medium text-gray-700 mb-2">Available Categories:</h4>
@@ -193,7 +197,7 @@ function AddTransaction() {
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
                     Transaction Type
@@ -232,7 +236,7 @@ function AddTransaction() {
                     Amount
                   </label>
                   <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">$</span>
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">FCFA</span>
                     <input
                       type="number"
                       id="amount"
@@ -245,7 +249,7 @@ function AddTransaction() {
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <label
                     htmlFor="category"
@@ -267,7 +271,7 @@ function AddTransaction() {
                     ))}
                   </select>
                 </div>
-                
+
                 <button
                   type="submit"
                   disabled={isLoading}
