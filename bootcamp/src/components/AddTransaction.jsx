@@ -106,19 +106,22 @@ function AddTransaction() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      {/* Compact Header */}
-      <header className="sticky top-0 z-50 shadow-md py-4">
-        <div className="container mx-auto px-4 flex justify-between items-center max-w-7xl">
-          <h1 className="text-white text-xl font-bold">Financial Tracker</h1>
-          <NavLink
-            to="/"
-            className="flex items-center text-white hover:text-blue-200 transition-colors"
-          >
-            <HomeIcon className="h-6 w-6 mr-1" />
-            <span>Home</span>
-          </NavLink>
-        </div>
-      </header>
+      <header className="sticky top-0 z-50 bg-blue-700 shadow-md py-4">
+  <div className="container mx-auto px-4 flex justify-between items-center max-w-7xl">
+    {/* App Title */}
+    <h1 className="text-white text-lg sm:text-xl font-bold">Financial Tracker</h1>
+
+    {/* Navigation - Adjusted for better alignment */}
+    <NavLink
+      to="/"
+      className="flex items-center text-white hover:text-blue-200 transition-colors space-x-2"
+    >
+      <HomeIcon className="h-6 w-6 sm:h-7 sm:w-7" />
+      <span className="hidden sm:inline text-sm sm:text-base">Home</span>
+    </NavLink>
+  </div>
+</header>
+
 
       {/* Main Content - No big gap */}
       <div className="container mx-auto px-4 py-6">
