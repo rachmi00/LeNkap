@@ -1,81 +1,86 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DateComponent from "./DateComponent";
 import { CalendarIcon } from '@heroicons/react/solid';
 import BottomNavBar from "./BottomNavBar";
-
-
 import Expense from "./Expense";
 import Income from "./Income";
 import TransactionList from "./TransactionList";
-import axios from "axios";
 
-
-function Home(){
-  
-  const history = useNavigate();
+function Home() {
+  const navigate = useNavigate();
   const isVisibleStored = localStorage.getItem("isButtonVisible");
   const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true);
-
-
-
+  
   useEffect(() => {
-    // If the button is hidden, set it to visible after 10 seconds
+    // If the button is hidden, set it to visible after 10 minutes (600000ms)
     if (!isVisible) {
       const timeout = setTimeout(() => {
         setIsVisible(true);
         localStorage.setItem("isButtonVisible", "true");
       }, 600000);
-
       // Clean up the timeout when the component unmounts
       return () => clearTimeout(timeout);
     }
   }, [isVisible]);
   
-  
   const hideButton = () => {
     setIsVisible(false);
     localStorage.setItem("isButtonVisible", "false");
-    history('/signup');
+    navigate('/signup');
   }
   
-
-  
-
-   return(
+  return (
+    <main className="min-h-screen bg-gray-50 pb-20 md:pb-0">
     
-<main  className=" md:py-10 md:px-8">
-  <div className=" ">
-    <div className=" h-34 grid gap-4 col-start-1 col-end-3 row-start-1 sm:mb-6 sm:grid-cols-4 lg:gap-6 lg:col-start-2 lg:row-end-6 lg:row-span-6 lg:mb-0 bg-blue-400 rounded ">
-     <section className="flex mt-1 mx-3">
-       <span className="text-white"> <CalendarIcon className="h-6 w-6" /></span> <DateComponent/> 
-     </section>
-     <h1 className="text-2xl mx-4 font-bold text-white mt-1 sm:text-white-900 md:text-2xl dark:sm:text-white">Hello Le Nkap User</h1>
-     <section className="mx-4 mb-5">
-     
-     <p className="leading-4 font-medium mt-2 text-white sm:text-white-500 dark:sm:text-white-400">Expense: <Expense/></p>
-     <p className="leading-4 font-medium mt-2 text-white sm:text-white-500 dark:sm:text-white-400">Income: <Income/></p>
-     </section>
-    </div>
-    <section>
-    <TransactionList/>
-            <div className="flex justify-center items-center ">
-             
-             {
-              isVisible &&  <button className="bg-blue-300 rounded p-2 mt-8 text-white" onClick={hideButton}>Click here to get started!</button>
-             }
-              
-            </div>
+      <div className="bg-blue-700 text-white rounded-b-3xl shadow-lg px-4 py-6 mb-6">
+        <div className="container mx-auto">
+          {/* Date Section */}
+          <div className="flex items-center mb-3">
+            <CalendarIcon className="h-5 w-5 mr-2" />
+            <DateComponent />
+          </div>
           
-    
-    </section>
-    
-    <BottomNavBar/>
-   
-   
-  </div>
-</main>
-    
-   )
+      
+          <h1 className="text-2xl font-bold mb-4">Hello Le Nkap User</h1>
+          
+          {/* Financial Summary */}
+          <div className="grid grid-cols-2 gap-4 mb-2">
+            <div className="bg-white/20 rounded-xl p-4">
+              <p className="text-sm font-medium mb-1 opacity-90">Expense</p>
+              <div className="text-xl font-bold"><Expense /></div>
+            </div>
+            <div className="bg-white/20 rounded-xl p-4">
+              <p className="text-sm font-medium mb-1 opacity-90">Income</p>
+              <div className="text-xl font-bold"><Income /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+     
+      <div className="container mx-auto px-4">
+        <TransactionList />
+        
+        {/* Get Started Button */}
+        {isVisible && (
+          <div className="flex justify-center mt-8 mb-16 md:mb-8">
+            <button 
+              onClick={hideButton}
+              className="bg-blue-700 hover:bg-blue-800 text-white font-medium py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+            >
+              Click here to get started!
+            </button>
+          </div>
+        )}
+      </div>
+      
+      {/* Bottom Navigation (mobile only) */}
+      <div className="md:hidden">
+        <BottomNavBar />
+      </div>
+    </main>
+  );
 }
-export default Home
+
+export default Home;
