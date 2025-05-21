@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Correct import for react-router-dom navigation
-import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
-import { motion } from "framer-motion";
+
+// Removed: import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
+// Removed: import { motion } from "framer-motion";
 
 // Assuming these are your custom components located in the same directory or correctly aliased
 import DateComponent from "./date-component";
@@ -9,6 +10,104 @@ import BottomNavBar from "./bottom-nav-bar";
 import Expense from "./expense";
 import Income from "./income";
 import TransactionList from "./transaction-list";
+
+// --- INLINE SVG ICON COMPONENTS (Copied from Dashboard.jsx) ---
+// These replace lucide-react icons to remove external dependency
+
+const CalendarIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+);
+
+const BarChart3Icon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 20V10"></path>
+    <path d="M18 20V4"></path>
+    <path d="M6 20v-4"></path>
+  </svg>
+);
+
+const TrendingUpIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+    <polyline points="16 7 22 7 22 13"></polyline>
+  </svg>
+);
+
+const ArrowUpIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <line x1="12" y1="19" x2="12" y2="5"></line>
+    <polyline points="5 12 12 5 19 12"></polyline>
+  </svg>
+);
+
+const ArrowDownIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <polyline points="19 12 12 19 5 12"></polyline>
+  </svg>
+);
+
+// --- END INLINE SVG ICON COMPONENTS ---
 
 export default function Home() {
   const navigate = useNavigate(); // Hook from react-router-dom for navigation
@@ -18,13 +117,10 @@ export default function Home() {
   const isVisibleStored = typeof window !== "undefined" ? localStorage.getItem("isButtonVisible") : null;
   const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true);
 
-  // State to control the initial fade-in animation of the main content
-  const [isLoaded, setIsLoaded] = useState(false);
+  // Removed: State to control the initial fade-in animation of the main content (isLoaded)
+  // Removed: useEffect for isLoaded
 
   useEffect(() => {
-    // Set isLoaded to true after component mounts to trigger initial animations
-    setIsLoaded(true);
-
     // If the button is currently hidden, set a timeout to make it visible again after 10 minutes
     if (!isVisible) {
       const timeout = setTimeout(() => {
@@ -42,15 +138,7 @@ export default function Home() {
     navigate("/signup"); // Navigate using react-router-dom's navigate function
   };
 
-  // Framer Motion animation variants for a smooth fade-in effect
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 }, // Initial state: invisible and slightly below position
-    visible: {
-      opacity: 1, // Final state: fully visible
-      y: 0,       // Final state: at original Y position
-      transition: { duration: 0.5 }, // Animation duration
-    },
-  };
+  // Removed: Framer Motion animation variants (fadeIn)
 
   return (
     // Main container for the entire page, setting min-height, background gradient, and font styles
@@ -58,11 +146,8 @@ export default function Home() {
       {/* Content wrapper with max-width, auto margins for centering, and responsive padding */}
       <div className="max-w-6xl mx-auto w-full flex-grow px-4 sm:px-6 lg:px-8 py-6 md:py-8">
 
-        {/* Header Section - Wrapped in motion.div for initial fade-in animation */}
-        <motion.div
-          initial="hidden" // Start with the 'hidden' variant
-          animate={isLoaded ? "visible" : "hidden"} // Animate to 'visible' when isLoaded is true
-          variants={fadeIn} // Apply the defined fadeIn animation variants
+        {/* Header Section - Replaced motion.div with div */}
+        <div // Removed: initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn}
           className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-b-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 mb-8 md:mb-10 mt-0 md:mt-8 overflow-hidden"
         >
           {/* Date Component Section */}
@@ -73,26 +158,20 @@ export default function Home() {
 
           {/* Welcome Message and Get Started Button */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-            {/* Welcome Title - Wrapped in motion.h1 for a subtle slide-in animation */}
-            <motion.h1
+            {/* Welcome Title - Replaced motion.h1 with h1 */}
+            <h1 // Removed: initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.5 }}
               className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4 md:mb-0"
-              initial={{ opacity: 0, x: -20 }} // Initial state: invisible and slightly left
-              animate={{ opacity: 1, x: 0 }}   // Final state: visible and at original X position
-              transition={{ delay: 0.2, duration: 0.5 }} // Animation delay and duration
             >
               Welcome to Le Nkap
               {/* Subtitle for the finance tracker */}
               <span className="block text-lg sm:text-xl font-normal text-blue-100 mt-1 opacity-90">
                 Your personal finance tracker
               </span>
-            </motion.h1>
+            </h1>
 
-            {/* Get Started Button - Conditionally rendered and wrapped in motion.div for animation */}
+            {/* Get Started Button - Conditionally rendered and replaced motion.div with div */}
             {isVisible && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }} // Initial state: invisible and slightly smaller
-                animate={{ opacity: 1, scale: 1 }}   // Final state: visible and normal size
-                transition={{ delay: 0.4, duration: 0.3 }} // Animation delay and duration
+              <div // Removed: initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.4, duration: 0.3 }}
               >
                 {/* Custom styled button (no shadcn) */}
                 <button
@@ -101,17 +180,14 @@ export default function Home() {
                 >
                   Get Started
                 </button>
-              </motion.div>
+              </div>
             )}
           </div>
 
           {/* Summary Cards for Total Expense and Total Income */}
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Total Expense Card - Wrapped in motion.div for animation */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
+            {/* Total Expense Card - Replaced motion.div with div */}
+            <div // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.4 }}
               className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"
             >
               <p className="text-blue-100 text-sm font-medium mb-2">Total Expense</p>
@@ -119,15 +195,16 @@ export default function Home() {
                 <div className="p-3 bg-red-500/30 rounded-lg mr-4">
                   <ArrowDownIcon className="h-6 w-6 text-red-200" /> {/* Down arrow for expense */}
                 </div>
-                <Expense className="text-2xl sm:text-3xl font-bold text-white tracking-tight" />
+                {/* Note: Expense component expects 'className' but is not modified. */}
+                {/* If you want styling on this number, wrap it in a div or modify Expense.jsx */}
+                <span className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                    <Expense />
+                </span>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Total Income Card - Wrapped in motion.div for animation */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.4 }}
+            {/* Total Income Card - Replaced motion.div with div */}
+            <div // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.4 }}
               className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"
             >
               <p className="text-blue-100 text-sm font-medium mb-2">Total Income</p>
@@ -135,17 +212,18 @@ export default function Home() {
                 <div className="p-3 bg-green-500/30 rounded-lg mr-4">
                   <ArrowUpIcon className="h-6 w-6 text-green-200" /> {/* Up arrow for income */}
                 </div>
-                <Income className="text-2xl sm:text-3xl font-bold text-white tracking-tight" />
+                {/* Note: Income component expects 'className' but is not modified. */}
+                {/* If you want styling on this number, wrap it in a div or modify Income.jsx */}
+                <span className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                    <Income />
+                </span>
               </div>
-            </motion.div>
+            </div>
           </div>
-        </motion.div> {/* Correctly closing the main Header Section motion.div */}
+        </div> {/* Correctly closing the main Header Section div */}
 
-        {/* Financial Overview Section - Wrapped in motion.section for animation */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.4 }}
+        {/* Financial Overview Section - Replaced motion.section with section */}
+        <section // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.4 }}
           className="mb-8"
         >
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Financial Overview</h2>
@@ -188,13 +266,10 @@ export default function Home() {
               <p className="text-sm text-gray-600 mt-2">32% of total expenses</p>
             </div>
           </div>
-        </motion.section>
+        </section>
 
-        {/* Transactions Section - Wrapped in motion.section for animation */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.4 }}
+        {/* Transactions Section - Replaced motion.section with section */}
+        <section // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.4 }}
           className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 md:p-8 mb-8"
         >
           <div className="flex items-center justify-between mb-6">
@@ -205,7 +280,7 @@ export default function Home() {
             </button>
           </div>
           <TransactionList />
-        </motion.section>
+        </section>
       </div>
 
       {/* Bottom Navigation Bar */}
