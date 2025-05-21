@@ -41,7 +41,7 @@ function Home() {
 
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold leading-tight">
-              Hello, Le Nkap User
+              Hello 
             </h1>
 
             {isVisible && (
