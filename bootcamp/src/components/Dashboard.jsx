@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalState";
 import { NavLink } from "react-router-dom";
 
+// Modern icon components with consistent styling
 const HomeIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -135,46 +136,46 @@ function Dashboard() {
     }
   });
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#8dd1e1'];
+  const COLORS = ['#6366F1', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#3B82F6', '#D946EF']; // More vibrant Tailwind-like colors
 
   const formatCurrency = (amount) => {
     return `FCFA ${Number(amount).toLocaleString()}`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-4 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-white text-xl font-bold flex items-center">
-            <ChartBarIcon className="h-6 w-6 mr-2" /> Financial Dashboard
+    <div className="min-h-screen bg-gray-100 pb-20"> {/* Added pb-20 for bottom nav padding */}
+      {/* Top Navigation Bar - Smaller and more refined */}
+      <nav className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-3 shadow-md">
+        <div className="container mx-auto flex justify-between items-center max-w-7xl">
+          <h1 className="text-white text-lg font-semibold flex items-center">
+            <ChartBarIcon className="h-5 w-5 mr-2 text-blue-200" /> Dashboard
           </h1>
-          <div className="flex items-center space-x-4">
-            <NavLink
-              to="/"
-              className="text-white hover:text-indigo-100 transition-colors p-2 rounded-full hover:bg-indigo-500"
-              aria-label="Home"
-            >
-              <HomeIcon className="h-6 w-6" />
-            </NavLink>
-          </div>
+          <NavLink
+            to="/"
+            className="text-white hover:text-blue-200 transition-colors duration-200 p-1.5 rounded-full hover:bg-blue-700/50"
+            aria-label="Home"
+          >
+            <HomeIcon className="h-5 w-5" />
+          </NavLink>
         </div>
       </nav>
 
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between flex-wrap bg-white shadow-sm rounded-lg mt-4 max-w-6xl">
-        <h2 className="text-xl font-semibold text-gray-800 flex items-center">
+      {/* Filter Controls - Clean and aligned */}
+      <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white shadow-sm rounded-lg mt-4 max-w-7xl">
+        <h2 className="text-lg font-semibold text-gray-800 flex items-center">
           <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
-          Time Period
+          Filter by Period:
         </h2>
-        <div className="flex space-x-2 mt-2 sm:mt-0">
+        <div className="flex flex-wrap justify-center gap-2">
           {['day', 'week', 'month', 'all'].map((period) => (
             <button
               key={period}
               onClick={() => setTimeFilter(period)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                timeFilter === period
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+                ${timeFilter === period
                   ? 'bg-indigo-600 text-white shadow-md'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+                }`}
             >
               {period.charAt(0).toUpperCase() + period.slice(1)}
             </button>
@@ -182,165 +183,145 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-6 max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:shadow-lg">
-            <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-white">Total Balance</h3>
-              <CircleStackIcon className="h-8 w-8 text-white/80" />
-            </div>
-            <div className="px-6 py-6 flex flex-col items-center">
-              <p className={`text-3xl font-bold ${
-                Number(totalBalance) >= 0 ? "text-blue-600" : "text-red-600"
+      {/* Main Dashboard Grid - More balanced and spaced */}
+      <div className="container mx-auto px-4 py-6 max-w-7xl">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Balance Card */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition-all hover:scale-[1.01] hover:shadow-xl">
+            <div className="p-5">
+              <div className="flex items-center mb-3">
+                <CircleStackIcon className="h-7 w-7 text-blue-600 mr-3" />
+                <h3 className="text-lg font-semibold text-gray-700">Total Balance</h3>
+              </div>
+              <p className={`text-4xl font-bold ${
+                Number(totalBalance) >= 0 ? "text-blue-700" : "text-red-600"
               }`}>
                 {formatCurrency(totalBalance)}
               </p>
-              <p className="text-sm text-gray-500 mt-2">Current balance</p>
+              <p className="text-sm text-gray-500 mt-1">Overall financial standing</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:shadow-lg">
-            <div className="px-6 py-4 bg-gradient-to-r from-green-500 to-emerald-600 flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-white">Total Income</h3>
-              <TrendingUpIcon className="h-8 w-8 text-white/80" />
-            </div>
-            <div className="px-6 py-6 flex flex-col items-center">
-              <p className="text-3xl font-bold text-green-600">
+          {/* Income Card */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition-all hover:scale-[1.01] hover:shadow-xl">
+            <div className="p-5">
+              <div className="flex items-center mb-3">
+                <TrendingUpIcon className="h-7 w-7 text-green-600 mr-3" />
+                <h3 className="text-lg font-semibold text-gray-700">Total Income</h3>
+              </div>
+              <p className="text-4xl font-bold text-green-700">
                 {formatCurrency(totalIncome)}
               </p>
-              <p className="text-sm text-gray-500 mt-2">Money in</p>
+              <p className="text-sm text-gray-500 mt-1">Money received</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:shadow-lg">
-            <div className="px-6 py-4 bg-gradient-to-r from-red-500 to-rose-600 flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-white">Total Expenses</h3>
-              <TrendingDownIcon className="h-8 w-8 text-white/80" />
-            </div>
-            <div className="px-6 py-6 flex flex-col items-center">
-              <p className="text-3xl font-bold text-red-600">
+          {/* Expenses Card */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition-all hover:scale-[1.01] hover:shadow-xl">
+            <div className="p-5">
+              <div className="flex items-center mb-3">
+                <TrendingDownIcon className="h-7 w-7 text-red-600 mr-3" />
+                <h3 className="text-lg font-semibold text-gray-700">Total Expenses</h3>
+              </div>
+              <p className="text-4xl font-bold text-red-700">
                 {formatCurrency(totalExpenses)}
               </p>
-              <p className="text-sm text-gray-500 mt-2">Money out</p>
+              <p className="text-sm text-gray-500 mt-1">Money spent</p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-8">
-          <div className="bg-white rounded-xl shadow-md overflow-hidden md:col-span-5">
-            <div className="px-6 py-4 bg-gray-50 border-b flex items-center">
+        {/* Charts & Breakdown Section - Improved visual separation */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          {/* Expense Breakdown (Non-Chart) */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center">
               <ChartBarIcon className="h-5 w-5 mr-2 text-indigo-600" />
-              <h3 className="font-semibold text-gray-700">Expense Breakdown</h3>
+              <h3 className="font-semibold text-gray-700">Expense Breakdown by Category</h3>
             </div>
-            <div className="p-4 h-80 flex items-center justify-center">
+            <div className="p-6 min-h-[250px] flex flex-col justify-center">
               {Object.keys(categorySummary).length > 0 ? (
-                <div className="text-center">
-                  <p className="text-gray-600 font-medium mb-2">Category distribution (by amount):</p>
-                  <ul className="list-disc list-inside text-left mx-auto max-w-xs">
-                    {Object.entries(categorySummary).map(([name, value], index) => (
-                      <li key={name} className="flex items-center text-gray-800">
+                <ul className="space-y-3">
+                  {Object.entries(categorySummary).sort(([, a], [, b]) => b - a).map(([name, value], index) => (
+                    <li key={name} className="flex justify-between items-center text-gray-800">
+                      <span className="flex items-center text-base font-medium">
                         <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                        {name}: {formatCurrency(value)}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="text-sm text-gray-500 mt-4">For a visual chart, please consider a charting library.</p>
-                </div>
-              ) : (
-                <p className="text-gray-500">No expense data available for this period.</p>
-              )}
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-md overflow-hidden md:col-span-7">
-            <div className="px-6 py-4 bg-gray-50 border-b flex items-center">
-              <TagIcon className="h-5 w-5 mr-2 text-indigo-600" />
-              <h3 className="font-semibold text-gray-700">Detailed Category Breakdown</h3>
-            </div>
-            <div className="p-4 overflow-auto max-h-80">
-              {Object.keys(categorySummary).length > 0 ? (
-                <div className="divide-y divide-gray-100">
-                  {Object.entries(categorySummary).map(([category, value], index) => (
-                    <div key={category} className="grid grid-cols-2 py-3 px-2 hover:bg-gray-50 rounded-lg">
-                      <div>
-                        <span className="flex items-center">
-                          <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                          <span className="font-medium text-gray-800">{category}</span>
-                        </span>
-                      </div>
-                      <div className="text-right font-semibold text-gray-700">
-                        {formatCurrency(value)}
-                      </div>
-                    </div>
+                        {name}
+                      </span>
+                      <span className="text-lg font-semibold">{formatCurrency(value)}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500">No categories to display for this period.</p>
+                <div className="text-center py-8 text-gray-500">
+                  <p>No expense data available for this period to show category breakdown.</p>
+                  <p className="text-sm mt-2">Add some expenses to see insights here!</p>
                 </div>
               )}
             </div>
           </div>
-        </div>
 
-        <div className="bg-white rounded-xl shadow-md overflow-hidden mt-8">
-          <div className="px-6 py-4 bg-gray-50 border-b flex justify-between items-center">
-            <h3 className="font-semibold text-gray-700 flex items-center">
-              <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
-              Recent Transactions
-            </h3>
-            <NavLink
-              to="/transactions"
-              className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-            >
-              View All
-            </NavLink>
-          </div>
-          <div className="overflow-x-auto">
-            {transactions.length > 0 ? (
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Description
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Amount
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredTransactions.slice(0, 5).map((transaction, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(transaction.date).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {transaction.text}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {transaction.category ? transaction.category.name : "Uncategorized"}
-                      </td>
-                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium text-right ${
-                        transaction.amount < 0 ? "text-red-600" : "text-green-600"
-                      }`}>
-                        {transaction.amount < 0 ? "-" : "+"} {formatCurrency(Math.abs(transaction.amount))}
-                      </td>
+          {/* Recent Transactions List */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="font-semibold text-gray-700 flex items-center">
+                <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
+                Recent Transactions
+              </h3>
+              <NavLink
+                to="/transactions" {/* Assuming a full transactions page exists */}
+                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+              >
+                View All
+              </NavLink>
+            </div>
+            <div className="overflow-x-auto">
+              {filteredTransactions.length > 0 ? (
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Description
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Category
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Amount
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-500">No transactions to display for this period.</p>
-              </div>
-            )}
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-100">
+                    {filteredTransactions.slice(0, 5).map((transaction) => (
+                      <tr key={transaction.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
+                          {new Date(transaction.date).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-[150px] sm:max-w-none">
+                          {transaction.text}
+                        </td>
+                        <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
+                          {transaction.category ? transaction.category.name : "Uncategorized"}
+                        </td>
+                        <td className={`px-6 py-3 whitespace-nowrap text-sm font-semibold text-right ${
+                          transaction.amount < 0 ? "text-red-600" : "text-green-600"
+                        }`}>
+                          {transaction.amount < 0 ? "-" : "+"} {formatCurrency(Math.abs(transaction.amount))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <p>No recent transactions for this period.</p>
+                  <p className="text-sm mt-2">Your recent activity will show up here.</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
