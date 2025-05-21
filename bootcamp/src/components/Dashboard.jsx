@@ -1,39 +1,38 @@
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation" // Using next/navigation for Next.js 13+ app router
-import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react'
-import { motion } from "framer-motion"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Changed from next/navigation
+import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
+import { motion } from "framer-motion";
 
-// Assuming these are your custom components, not shadcn
-import DateComponent from "./date-component"
-import BottomNavBar from "./bottom-nav-bar"
-import Expense from "./expense"
-import Income from "./income"
-import TransactionList from "./transaction-list"
+import DateComponent from "./date-component";
+import BottomNavBar from "./bottom-nav-bar";
+import Expense from "./expense";
+import Income from "./income";
+import TransactionList from "./transaction-list";
+
 
 export default function Home() {
-  const router = useRouter()
-  // Ensure localStorage access is client-side safe
-  const isVisibleStored = typeof window !== "undefined" ? localStorage.getItem("isButtonVisible") : null
-  const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true)
-  const [isLoaded, setIsLoaded] = useState(false) // For initial animation
+  const navigate = useNavigate(); // This is from react-router-dom
+  const isVisibleStored = typeof window !== "undefined" ? localStorage.getItem("isButtonVisible") : null;
+  const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true);
+  const [isLoaded, setIsLoaded] = useState(false); // For initial animation
 
   useEffect(() => {
-    setIsLoaded(true) // Trigger initial animation on mount
+    setIsLoaded(true); // Trigger initial animation on mount
 
     if (!isVisible) {
       const timeout = setTimeout(() => {
-        setIsVisible(true)
-        localStorage.setItem("isButtonVisible", "true")
-      }, 600000) // 10 minutes
-      return () => clearTimeout(timeout)
+        setIsVisible(true);
+        localStorage.setItem("isButtonVisible", "true");
+      }, 600000); // 10 minutes
+      return () => clearTimeout(timeout);
     }
-  }, [isVisible])
+  }, [isVisible]);
 
   const hideButton = () => {
-    setIsVisible(false)
-    localStorage.setItem("isButtonVisible", "false")
-    router.push("/signup") // Use router.push for Next.js navigation
-  }
+    setIsVisible(false);
+    localStorage.setItem("isButtonVisible", "false");
+    navigate("/signup"); // Use navigate from react-router-dom
+  };
 
   // Framer Motion animation variants
   const fadeIn = {
@@ -43,7 +42,7 @@ export default function Home() {
       y: 0,
       transition: { duration: 0.5 },
     },
-  }
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col font-sans antialiased text-gray-800">
@@ -79,7 +78,6 @@ export default function Home() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.4, duration: 0.3 }}
               >
-                {/* Replaced shadcn Button with a custom styled button */}
                 <button
                   className="w-full md:w-auto bg-white text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700 font-semibold py-3 px-6 rounded-xl transition duration-300 shadow-md flex items-center justify-center text-lg"
                   onClick={hideButton}
@@ -120,11 +118,11 @@ export default function Home() {
                 </div>
                 <Income className="text-2xl sm:text-3xl font-bold text-white tracking-tight" />
               </div>
-            </motion.div>
+            </div>
           </div>
         </motion.div>
 
-        {/* Financial Overview - Reverted to a div with Tailwind styles */}
+        {/* Financial Overview */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,7 +131,7 @@ export default function Home() {
         >
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Financial Overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Card 1: Savings Rate - Replaced Card with div */}
+            {/* Card 1: Savings Rate */}
             <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium text-gray-500">Savings Rate</h3>
@@ -147,7 +145,7 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Card 2: Monthly Budget - Replaced Card with div */}
+            {/* Card 2: Monthly Budget */}
             <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium text-gray-500">Monthly Budget</h3>
@@ -159,7 +157,7 @@ export default function Home() {
               <p className="text-sm text-gray-600 mt-2">5 days remaining</p>
             </div>
 
-            {/* Card 3: Top Category - Replaced Card with div */}
+            {/* Card 3: Top Category */}
             <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium text-gray-500">Top Category</h3>
@@ -182,7 +180,6 @@ export default function Home() {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-800">Recent Transactions</h2>
-            {/* Replaced shadcn Button with a custom styled button */}
             <button className="text-blue-600 hover:text-blue-800 font-medium px-3 py-2 rounded-md transition-colors duration-200">
               View All
             </button>
@@ -193,5 +190,5 @@ export default function Home() {
 
       <BottomNavBar />
     </main>
-  )
+  );
 }
