@@ -29,24 +29,24 @@ function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 flex flex-col font-sans antialiased text-gray-800">
-      <div className="max-w-xl mx-auto w-full flex-grow px-4 sm:px-6 py-6 md:py-8"> {/* Reduced max-width for a more mobile-first, app-like feel */}
-
-        {/* Header Section */}
-        <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8 mb-8"> {/* Changed to white background, rounded corners, softer shadow */}
-          <section className="flex items-center space-x-2 text-gray-500 font-medium text-sm mb-4">
-            <CalendarIcon className="h-5 w-5" />
+    <main className="min-h-screen bg-gray-100 flex flex-col font-sans antialiased text-gray-800">
+      <div className="max-w-lg mx-auto w-full flex-grow px-4 py-6">
+        
+        {/* Header Section - With gradient background inspired by the screenshots */}
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl shadow-lg p-6 mb-6 text-white">
+          <section className="flex items-center space-x-2 text-white text-sm mb-2 opacity-90">
+            <CalendarIcon className="h-4 w-4" />
             <DateComponent />
           </section>
 
-          <div className="flex items-center justify-between mb-6"> {/* Simplified flexbox for consistent spacing */}
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight"> {/* Darker, bolder text for primary emphasis */}
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold leading-tight">
               Hello, Le Nkap User
             </h1>
 
             {isVisible && (
               <button
-                className="bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-semibold py-2 px-5 rounded-full transition duration-200 ease-in-out shadow-md text-base md:text-lg whitespace-nowrap flex-shrink-0" /* Adjusted button style for app-like CTA */
+                className="bg-white text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 font-semibold py-2 px-4 rounded-full transition duration-200 ease-in-out shadow-md text-sm"
                 onClick={hideButton}
               >
                 Get Started
@@ -55,32 +55,66 @@ function Home() {
           </div>
         </div>
 
-        {/* Summary Cards - Moved outside header for clearer separation, like many app designs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"> {/* Consistent gap */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"> {/* White background, subtle shadow and border for distinct cards */}
-            <p className="text-sm font-medium text-gray-600 mb-2">Total Expense</p>
+        {/* Summary Cards - Horizontal scrollable layout with colorful borders */}
+        <div className="flex space-x-4 mb-6 overflow-x-auto py-2">
+          <div className="bg-white rounded-2xl p-5 shadow-md min-w-[160px] flex-1 border-l-4 border-red-500">
+            <p className="text-xs font-medium text-gray-500 mb-2">Total Expense</p>
             <div className="flex items-center">
-              <div className="p-2 bg-red-100 rounded-lg mr-3 flex-shrink-0"> {/* Lighter, square background for icons */}
-                <ChartBarIcon className="h-5 w-5 text-red-500" /> {/* Red icon for expense */}
+              <div className="p-2 bg-red-100 rounded-full mr-3">
+                <ChartBarIcon className="h-4 w-4 text-red-500" />
               </div>
-              <Expense className="text-2xl font-bold text-gray-900" /> {/* Dark, bold text for figures */}
+              <Expense className="text-xl font-bold text-gray-900" />
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"> {/* White background, subtle shadow and border */}
-            <p className="text-sm font-medium text-gray-600 mb-2">Total Income</p>
+          <div className="bg-white rounded-2xl p-5 shadow-md min-w-[160px] flex-1 border-l-4 border-green-500">
+            <p className="text-xs font-medium text-gray-500 mb-2">Total Income</p>
             <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg mr-3 flex-shrink-0"> {/* Lighter, square background for icons */}
-                <ChartBarIcon className="h-5 w-5 text-green-500" /> {/* Green icon for income */}
+              <div className="p-2 bg-green-100 rounded-full mr-3">
+                <ChartBarIcon className="h-4 w-4 text-green-500" />
               </div>
-              <Income className="text-2xl font-bold text-gray-900" /> {/* Dark, bold text for figures */}
+              <Income className="text-xl font-bold text-gray-900" />
+            </div>
+          </div>
+        </div>
+
+        {/* Analytics Snapshot - New feature inspired by the screenshots */}
+        <div className="bg-white rounded-3xl shadow-md p-4 mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold text-gray-800">Monthly Overview</h2>
+            <button className="text-blue-500 text-sm font-medium">See All</button>
+          </div>
+          
+          {/* Simple Chart Placeholder */}
+          <div className="h-32 bg-gray-50 rounded-xl flex items-end justify-between p-2 mb-2">
+            <div className="w-8 bg-blue-500 rounded-t-md h-16"></div>
+            <div className="w-8 bg-blue-500 rounded-t-md h-24"></div>
+            <div className="w-8 bg-blue-500 rounded-t-md h-12"></div>
+            <div className="w-8 bg-blue-500 rounded-t-md h-20"></div>
+            <div className="w-8 bg-purple-500 rounded-t-md h-8"></div>
+            <div className="w-8 bg-purple-500 rounded-t-md h-16"></div>
+            <div className="w-8 bg-purple-500 rounded-t-md h-12"></div>
+          </div>
+          
+          {/* Legend */}
+          <div className="flex justify-center space-x-6 text-xs text-gray-600">
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-blue-500 rounded-full mr-1"></div>
+              <span>Income</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-3 h-3 bg-purple-500 rounded-full mr-1"></div>
+              <span>Expenses</span>
             </div>
           </div>
         </div>
 
         {/* Transactions Section */}
-        <section className="bg-white rounded-3xl shadow-lg p-5 sm:p-6 mb-20 md:mb-8"> {/* White background, consistent rounding, strong shadow */}
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Recent Transactions</h2> {/* Darker, bolder heading */}
+        <section className="bg-white rounded-3xl shadow-md p-5 mb-20">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold text-gray-800">Recent Transactions</h2>
+            <button className="text-blue-500 text-sm font-medium">View All</button>
+          </div>
           <TransactionList />
         </section>
       </div>
