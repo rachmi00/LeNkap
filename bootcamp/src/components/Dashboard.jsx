@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DateComponent from "./DateComponent";
-import { CalendarIcon, ChartBarIcon } from '@heroicons/react/solid'; // Using solid icons for clarity
+import { CalendarIcon, ChartBarIcon } from '@heroicons/react/solid';
 import BottomNavBar from "./BottomNavBar";
 import Expense from "./Expense";
 import Income from "./Income";
@@ -17,7 +17,7 @@ function Home() {
       const timeout = setTimeout(() => {
         setIsVisible(true);
         localStorage.setItem("isButtonVisible", "true");
-      }, 600000);
+      }, 600000); // 10 minutes
       return () => clearTimeout(timeout);
     }
   }, [isVisible]);
@@ -29,92 +29,57 @@ function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 flex flex-col font-sans antialiased text-gray-800">
-      <div className="max-w-lg mx-auto w-full flex-grow px-4 py-6">
-        
-        {/* Header Section - With gradient background inspired by the screenshots */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl shadow-lg p-6 mb-6 text-white">
-          <section className="flex items-center space-x-2 text-white text-sm mb-2 opacity-90">
-            <CalendarIcon className="h-4 w-4" />
+    <main className="min-h-screen bg-gray-100 flex flex-col"> {/* Changed bg-gray-50 to bg-gray-100 for a slightly softer background */}
+      <div className="max-w-6xl mx-auto w-full flex-grow px-4 sm:px-6 lg:px-8 pt-4 pb-20 md:pb-8"> {/* Added padding for different screen sizes, increased max-width */}
+
+        {/* Header Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-b-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 mb-8 md:mb-10 mt-0 md:mt-8"> {/* Larger rounding, increased padding, stronger shadow, more margin */}
+          <section className="flex items-center space-x-2 text-blue-100 mb-4"> {/* Added bottom margin */}
+            <CalendarIcon className="h-5 w-5" />
             <DateComponent />
           </section>
 
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold leading-tight">
-              Hello 
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6"> {/* Added bottom margin */}
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4 md:mb-0"> {/* Larger, bolder text, tighter leading */}
+              Hello, Le Nkap User
             </h1>
 
             {isVisible && (
               <button
-                className="bg-white text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 font-semibold py-2 px-4 rounded-full transition duration-200 ease-in-out shadow-md text-sm"
+                className="w-full md:w-auto bg-white text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700 font-semibold py-3 px-6 rounded-xl transition duration-300 shadow-md flex items-center justify-center text-lg"
                 onClick={hideButton}
               >
                 Get Started
               </button>
             )}
           </div>
-        </div>
 
-        {/* Summary Cards - Horizontal scrollable layout with colorful borders */}
-        <div className="flex space-x-4 mb-6 overflow-x-auto py-2">
-          <div className="bg-white rounded-2xl p-5 shadow-md min-w-[160px] flex-1 border-l-4 border-red-500">
-            <p className="text-xs font-medium text-gray-500 mb-2">Total Expense</p>
-            <div className="flex items-center">
-              <div className="p-2 bg-red-100 rounded-full mr-3">
-                <ChartBarIcon className="h-4 w-4 text-red-500" />
+          {/* Summary Cards */}
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5"> {/* Adjusted gap, responsive grid */}
+            <div className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"> {/* Increased opacity, blur, padding, rounding, stronger shadow */}
+              <p className="text-blue-100 text-sm font-medium mb-2">Total Expense</p>
+              <div className="flex items-center">
+                <div className="p-3 bg-red-500/30 rounded-lg mr-4"> {/* Larger padding, more opacity, more margin */}
+                  <ChartBarIcon className="h-6 w-6 text-red-200" /> {/* Larger icon */}
+                </div>
+                <Expense className="text-2xl sm:text-3xl font-bold text-white tracking-tight" /> {/* Larger text, tighter tracking */}
               </div>
-              <Expense className="text-xl font-bold text-gray-900" />
             </div>
-          </div>
 
-          <div className="bg-white rounded-2xl p-5 shadow-md min-w-[160px] flex-1 border-l-4 border-green-500">
-            <p className="text-xs font-medium text-gray-500 mb-2">Total Income</p>
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-full mr-3">
-                <ChartBarIcon className="h-4 w-4 text-green-500" />
+            <div className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"> {/* Increased opacity, blur, padding, rounding, stronger shadow */}
+              <p className="text-blue-100 text-sm font-medium mb-2">Total Income</p>
+              <div className="flex items-center">
+                <div className="p-3 bg-green-500/30 rounded-lg mr-4"> {/* Larger padding, more opacity, more margin */}
+                  <ChartBarIcon className="h-6 w-6 text-green-200" /> {/* Larger icon */}
+                </div>
+                <Income className="text-2xl sm:text-3xl font-bold text-white tracking-tight" /> {/* Larger text, tighter tracking */}
               </div>
-              <Income className="text-xl font-bold text-gray-900" />
-            </div>
-          </div>
-        </div>
-
-        {/* Analytics Snapshot - New feature inspired by the screenshots */}
-        <div className="bg-white rounded-3xl shadow-md p-4 mb-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-gray-800">Monthly Overview</h2>
-            <button className="text-blue-500 text-sm font-medium">See All</button>
-          </div>
-          
-          {/* Simple Chart Placeholder */}
-          <div className="h-32 bg-gray-50 rounded-xl flex items-end justify-between p-2 mb-2">
-            <div className="w-8 bg-blue-500 rounded-t-md h-16"></div>
-            <div className="w-8 bg-blue-500 rounded-t-md h-24"></div>
-            <div className="w-8 bg-blue-500 rounded-t-md h-12"></div>
-            <div className="w-8 bg-blue-500 rounded-t-md h-20"></div>
-            <div className="w-8 bg-purple-500 rounded-t-md h-8"></div>
-            <div className="w-8 bg-purple-500 rounded-t-md h-16"></div>
-            <div className="w-8 bg-purple-500 rounded-t-md h-12"></div>
-          </div>
-          
-          {/* Legend */}
-          <div className="flex justify-center space-x-6 text-xs text-gray-600">
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-blue-500 rounded-full mr-1"></div>
-              <span>Income</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 bg-purple-500 rounded-full mr-1"></div>
-              <span>Expenses</span>
             </div>
           </div>
         </div>
 
         {/* Transactions Section */}
-        <section className="bg-white rounded-3xl shadow-md p-5 mb-20">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold text-gray-800">Recent Transactions</h2>
-            <button className="text-blue-500 text-sm font-medium">View All</button>
-          </div>
+        <section className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 md:p-8 mb-8"> {/* Larger rounding, stronger shadow, more padding */}
           <TransactionList />
         </section>
       </div>
