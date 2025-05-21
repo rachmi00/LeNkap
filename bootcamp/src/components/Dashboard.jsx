@@ -97,24 +97,15 @@ const ArrowDownIcon = (props) => (
   </svg>
 );
 
-// Your custom components for financial data - IMPORTED AS-IS
 import Balance from "./Balance";
-import Expense from "./Expense";
-import Income from "./Income";
-
-// Other common components
-import DateComponent from "./date-component";
-import TransactionList from "./transaction-list";
-import BottomNavBar from "./bottom-nav-bar";
+import DateComponent from "./DateComponent"; // Corrected casing based on file name DateComponent.jsx
+import BottomNavBar from "./BottomNavBar";   // Corrected casing based on file name BottomNavBar.jsx
+import Expense from "./Expense";             // Corrected casing based on file name Expense.jsx
+import Income from "./Income";               // Corrected casing based on file name Income.jsx
+import TransactionList from "./TransactionList"; 
 
 
 export default function Dashboard() {
-  // isLoaded state and useEffect are no longer needed as there are no Framer Motion animations
-  // const [isLoaded, setIsLoaded] = useState(false);
-  // useEffect(() => { setIsLoaded(true); }, []);
-
-  // Framer Motion animation variants are no longer needed
-  // const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 }, }, };
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col font-sans antialiased text-gray-800">
