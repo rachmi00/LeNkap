@@ -1,229 +1,190 @@
-import React, { useState, useEffect } from "react";
-// No useRouter or useNavigate here, as Dashboard is assumed to be a display route
-// and not directly handling navigation to signup in this specific component.
+import React, { useContext, useEffect, useState } from "react";
+import { GlobalContext } from "../context/GlobalState"; // Adjust path as needed
+import { NavLink } from "react-router-dom"; // Assuming you want a back button or navigation
 
-
-
-const CalendarIcon = (props) => (
+// --- INLINE SVG ICON COMPONENTS (reused from previous prompts) ---
+const HomeIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
     {...props}
   >
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-    <line x1="16" y1="2" x2="16" y2="6"></line>
-    <line x1="8" y1="2" x2="8" y2="6"></line>
-    <line x1="3" y1="10" x2="21" y2="10"></line>
+    <path d="M11.47 3.84a.75.75 0 0 1 1.06 0l8.69 8.69a1.5 1.5 0 0 1 .43 1.06V20.25a2.25 2.25 0 0 1-2.25 2.25h-5.377a.75.75 0 0 1-.75-.75V16.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75v4.5c0 .414-.336.75-.75.75H3.375A2.25 2.25 0 0 1 1.125 20.25V13.59a1.5 1.5 0 0 1 .43-1.06l8.69-8.69Z" />
   </svg>
 );
 
-const BarChart3Icon = (props) => (
+const ChartBarIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
     {...props}
   >
-    <path d="M12 20V10"></path>
-    <path d="M18 20V4"></path>
-    <path d="M6 20v-4"></path>
+    <path fillRule="evenodd" d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm4.5 9a.75.75 0 0 1 .75-.75h.75a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V15Zm6-.75a.75.75 0 0 0-.75.75v1.5a.75.75 0 0 0 .75.75h.75a.75.75 0 0 0 .75-.75V15a.75.75 0 0 0-.75-.75h-.75Zm3.75-3.75a.75.75 0 0 0-.75.75v4.5a.75.75 0 0 0 .75.75h.75a.75.75 0 0 0 .75-.75V11.25a.75.75 0 0 0-.75-.75h-.75Z" clipRule="evenodd" />
   </svg>
 );
 
-const TrendingUpIcon = (props) => (
+const TrendingUpIcon = (props) => ( // Using an icon that implies 'income' or 'positive trend'
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
     {...props}
   >
-    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-    <polyline points="16 7 22 7 22 13"></polyline>
+    <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 1 1-1.06 1.06L14.25 6.06V20.25a.75.75 0 0 1-1.5 0V6.06L5.53 12.53a.75.75 0 0 1-1.06-1.06l7.5-7.5Z" clipRule="evenodd" />
   </svg>
 );
 
-const ArrowUpIcon = (props) => (
+const TrendingDownIcon = (props) => ( // Using an icon that implies 'expense' or 'negative trend'
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
     {...props}
   >
-    <line x1="12" y1="19" x2="12" y2="5"></line>
-    <polyline points="5 12 12 5 19 12"></polyline>
+    <path fillRule="evenodd" d="M11.03 20.03a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 1 1 1.06-1.06L9.75 17.94V3.75a.75.75 0 0 1 1.5 0v14.19l6.22-6.22a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clipRule="evenodd" />
   </svg>
 );
 
-const ArrowDownIcon = (props) => (
+const CircleStackIcon = (props) => ( // A generic icon for total balance/summary
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
     {...props}
   >
-    <line x1="12" y1="5" x2="12" y2="19"></line>
-    <polyline points="19 12 12 19 5 12"></polyline>
+    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clipRule="evenodd" />
   </svg>
 );
 
-import Balance from "./Balance";
-import DateComponent from "./DateComponent"; // Corrected casing based on file name DateComponent.jsx
-import BottomNavBar from "./BottomNavBar";   // Corrected casing based on file name BottomNavBar.jsx
-import Expense from "./Expense";             // Corrected casing based on file name Expense.jsx
-import Income from "./Income";               // Corrected casing based on file name Income.jsx
-import TransactionList from "./TransactionList"; 
+const TagIcon = (props) => ( // For category breakdown
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    {...props}
+  >
+    <path fillRule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 11.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 13l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 14.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 13L5.47 7.53a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+  </svg>
+);
+// --- END INLINE SVG ICON COMPONENTS ---
 
+function Dashboard() {
+  const { transactions } = useContext(GlobalContext);
 
-export default function Dashboard() {
+  // Calculate totals
+  const amounts = transactions.map((transaction) => transaction.amount);
+  const totalBalance = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
+  const totalIncome = amounts
+    .filter((item) => item > 0)
+    .reduce((acc, item) => (acc += item), 0)
+    .toFixed(2);
+  const totalExpenses = (
+    amounts.filter((item) => item < 0).reduce((acc, item) => (acc += item), 0) * -1
+  ).toFixed(2); // Convert to positive for display
+
+  // Calculate category breakdown
+  const categorySummary = {};
+  transactions.forEach(transaction => {
+    const categoryName = transaction.category ? transaction.category.name : "Uncategorized";
+    if (!categorySummary[categoryName]) {
+      categorySummary[categoryName] = { income: 0, expense: 0 };
+    }
+    if (transaction.amount > 0) {
+      categorySummary[categoryName].income += transaction.amount;
+    } else {
+      categorySummary[categoryName].expense += Math.abs(transaction.amount);
+    }
+  });
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col font-sans antialiased text-gray-800">
-      <div className="max-w-6xl mx-auto w-full flex-grow px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-
-        {/* Dashboard Header & Balance - Replaced motion.div with div */}
-        <div // Removed: initial="hidden" animate={isLoaded ? "visible" : "hidden"} variants={fadeIn}
-          className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-b-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 mb-8 md:mb-10 mt-0 md:mt-8 overflow-hidden text-white"
+    <main className="min-h-screen bg-gray-50 flex flex-col items-center">
+      {/* Top Header/Navigation Bar */}
+      <div className="w-full bg-purple-700 px-4 py-3 flex justify-between items-center shadow-md">
+        <h1 className="text-white text-xl font-semibold flex items-center">
+          <ChartBarIcon className="h-6 w-6 mr-2" /> Reports & Dashboard
+        </h1>
+        <NavLink
+          to="/"
+          className="text-white hover:text-purple-200 transition-colors duration-200 p-2 rounded-full hover:bg-purple-600"
+          aria-label="Home"
         >
-          <section className="flex items-center space-x-2 text-blue-100 mb-4">
-            <CalendarIcon className="h-5 w-5" />
-            <DateComponent />
-          </section>
-
-          <div className="mb-6">
-            <h1 className="text-xl sm:text-2xl font-semibold text-blue-100 leading-tight mb-2">
-              Current Balance
-            </h1>
-            <div className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-              <Balance />
-            </div>
-          </div>
-
-          {/* Summary Cards for Total Expense and Total Income */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Total Expense Card - Replaced motion.div with div */}
-            <div // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.4 }}
-              className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"
-            >
-              <p className="text-blue-100 text-sm font-medium mb-2">Total Expense</p>
-              <div className="flex items-center">
-                <div className="p-3 bg-red-500/30 rounded-lg mr-4">
-                  <ArrowDownIcon className="h-6 w-6 text-red-200" />
-                </div>
-                <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                  <Expense />
-                </div>
-              </div>
-            </div>
-
-            {/* Total Income Card - Replaced motion.div with div */}
-            <div // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.4 }}
-              className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"
-            >
-              <p className="text-blue-100 text-sm font-medium mb-2">Total Income</p>
-              <div className="flex items-center">
-                <div className="p-3 bg-green-500/30 rounded-lg mr-4">
-                  <ArrowUpIcon className="h-6 w-6 text-green-200" />
-                </div>
-                <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                  <Income />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> {/* Changed from motion.div to div */}
-
-        {/* Financial Overview Section - Replaced motion.section with section */}
-        <section // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.4 }}
-          className="mb-8"
-        >
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Financial Overview</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Card 1: Savings Rate */}
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium text-gray-500">Savings Rate</h3>
-                <div className="p-2 bg-blue-100 rounded-full">
-                  <TrendingUpIcon className="h-4 w-4 text-blue-600" />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-gray-900">24%</p>
-              <p className="text-sm text-green-600 flex items-center mt-2">
-                <ArrowUpIcon className="h-3 w-3 mr-1" /> 3% from last month
-              </p>
-            </div>
-
-            {/* Card 2: Monthly Budget */}
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium text-gray-500">Monthly Budget</h3>
-                <div className="p-2 bg-purple-100 rounded-full">
-                  <BarChart3Icon className="h-4 w-4 text-purple-600" />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-gray-900">75% Used</p>
-              <p className="text-sm text-gray-600 mt-2">5 days remaining</p>
-            </div>
-
-            {/* Card 3: Top Category */}
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium text-gray-500">Top Category</h3>
-                <div className="p-2 bg-amber-100 rounded-full">
-                  <BarChart3Icon className="h-4 w-4 text-amber-600" />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-gray-900">Groceries</p>
-              <p className="text-sm text-gray-600 mt-2">32% of total expenses</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Recent Transactions Section - Replaced motion.section with section */}
-        <section // Removed: initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.4 }}
-          className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 md:p-8 mb-8"
-        >
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">Recent Transactions</h2>
-            <button className="text-blue-600 hover:text-blue-800 font-medium px-3 py-2 rounded-md transition-colors duration-200">
-              View All
-            </button>
-          </div>
-          <TransactionList />
-        </section>
+          <HomeIcon className="h-6 w-6" />
+        </NavLink>
       </div>
 
-      <BottomNavBar />
+      {/* Main Content Area - Summary Cards */}
+      <div className="container mx-auto px-4 py-8 max-w-4xl w-full">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">Financial Overview</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Total Balance Card */}
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border-l-4 border-blue-500">
+            <CircleStackIcon className="h-10 w-10 text-blue-500 mb-3" />
+            <h3 className="text-lg font-medium text-gray-600">Total Balance</h3>
+            <p className={`text-3xl font-bold ${totalBalance >= 0 ? "text-green-600" : "text-red-600"} mt-2`}>
+              FCFA {Number(totalBalance).toLocaleString()}
+            </p>
+          </div>
+
+          {/* Total Income Card */}
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border-l-4 border-green-500">
+            <TrendingUpIcon className="h-10 w-10 text-green-500 mb-3" />
+            <h3 className="text-lg font-medium text-gray-600">Total Income</h3>
+            <p className="text-3xl font-bold text-green-600 mt-2">
+              FCFA {Number(totalIncome).toLocaleString()}
+            </p>
+          </div>
+
+          {/* Total Expenses Card */}
+          <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border-l-4 border-red-500">
+            <TrendingDownIcon className="h-10 w-10 text-red-500 mb-3" />
+            <h3 className="text-lg font-medium text-gray-600">Total Expenses</h3>
+            <p className="text-3xl font-bold text-red-600 mt-2">
+              FCFA {Number(totalExpenses).toLocaleString()}
+            </p>
+          </div>
+        </div>
+
+        {/* Category Breakdown Section */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 mt-8">
+          <div className="bg-gray-100 text-gray-800 p-4 flex items-center border-b border-gray-200">
+            <TagIcon className="h-6 w-6 mr-3 text-gray-600" />
+            <h3 className="font-semibold text-lg">Breakdown by Category</h3>
+          </div>
+          <div className="p-6">
+            {Object.keys(categorySummary).length > 0 ? (
+              <div className="space-y-4">
+                {Object.entries(categorySummary).map(([category, totals]) => (
+                  <div key={category} className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-100">
+                    <span className="text-lg font-medium text-gray-700">{category}</span>
+                    <div className="flex flex-col items-end">
+                      {totals.income > 0 && (
+                        <span className="text-green-600 text-base font-semibold">
+                          + FCFA {Number(totals.income).toLocaleString()}
+                        </span>
+                      )}
+                      {totals.expense > 0 && (
+                        <span className="text-red-600 text-base font-semibold">
+                          - FCFA {Number(totals.expense).toLocaleString()}
+                        </span>
+                      )}
+                      {totals.income === 0 && totals.expense === 0 && (
+                        <span className="text-gray-500 text-base">No transactions</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500 py-4">No transactions recorded yet. Add some!</p>
+            )}
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
+
+export default Dashboard;
