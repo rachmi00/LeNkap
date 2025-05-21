@@ -1,18 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Correct import for react-router-dom navigation
 
-// Removed: import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
-// Removed: import { motion } from "framer-motion";
 
-// Assuming these are your custom components located in the same directory or correctly aliased
-import DateComponent from "./date-component";
-import BottomNavBar from "./bottom-nav-bar";
-import Expense from "./expense";
-import Income from "./income";
-import TransactionList from "./transaction-list";
+import DateComponent from "./DateComponent"; // Corrected casing based on file name DateComponent.jsx
+import BottomNavBar from "./BottomNavBar";   
+import Expense from "./Expense";             
+import Income from "./Income";               
+import TransactionList from "./TransactionList"; 
 
 // --- INLINE SVG ICON COMPONENTS (Copied from Dashboard.jsx) ---
-// These replace lucide-react icons to remove external dependency
+
 
 const CalendarIcon = (props) => (
   <svg
