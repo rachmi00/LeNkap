@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { GlobalContext } from "../context/GlobalState"; // Ensure this path is correct based on your project structure
+// No axios needed anymore
+import { GlobalContext } from "../context/GlobalState"; // Ensure this path is correct
 
 // --- INLINE SVG ICON COMPONENTS ---
 // These replace @heroicons/react icons to remove external dependency
@@ -60,7 +60,7 @@ function AddTransaction() {
   const [categoryName, setCategoryName] = useState("");
   const [categories, setCategories] = useState([]);
   const [type, setType] = useState("expense");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Still useful for UX feedback
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
 
@@ -82,6 +82,7 @@ function AddTransaction() {
     e.preventDefault();
 
     if (!categoryName.trim()) {
+      alert("Category name cannot be empty."); // User feedback
       return;
     }
 
@@ -94,69 +95,41 @@ function AddTransaction() {
     setCategoryName("");
   };
 
-  const onSubmitTransaction = async (e) => {
+  const onSubmitTransaction = (e) => { // Made async unnecessary
     e.preventDefault();
 
     if (!name.trim() || !amount || !categoryId || !type) {
-      alert("Please fill in all transaction fields."); // Provide user feedback
+      alert("Please fill in all transaction fields.");
       return;
     }
 
-    setIsLoading(true);
-
-    const formData = {
-      name: name.trim(),
-      amount: type === "expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount)),
-      categoryId,
-      type,
-    };
+    setIsLoading(true); // Indicate loading for user feedback
 
     const newTransaction = {
-      id: Math.floor(Math.random() * 100000000),
-      name: formData.name,
-      amount: formData.amount,
+      id: Math.floor(Math.random() * 100000000), // Generate local ID
+      name: name.trim(),
+      amount: type === "expense" ? -Math.abs(Number(amount)) : Math.abs(Number(amount)),
       category: categories.find((cat) => cat.id === parseInt(categoryId)),
       type,
     };
 
-    try {
-      const authToken = localStorage.getItem("token");
+    // Add the transaction to the local state
+    addTransaction(newTransaction);
+    setShowPopup(true);
 
-      if (authToken) {
-        // Attempt to send the transaction to the backend
-        await axios.post(
-          "https://le-nkap-v1.onrender.com/transactions",
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-      } else {
-        console.warn("No token found. Adding transaction locally.");
-      }
-    } catch (error) {
-      console.error("API call failed. Adding transaction locally:", error);
-    } finally {
-      // Add the transaction to the local state regardless of API success/failure
-      addTransaction(newTransaction);
-      setShowPopup(true);
+    // Clear form fields
+    setName("");
+    setAmount("");
+    setCategoryId("");
+    setType("expense");
 
-      // Clear form fields
-      setName("");
-      setAmount("");
-      setCategoryId("");
-      setType("expense");
+    // Navigate back to the home screen after a delay
+    setTimeout(() => {
+      setShowPopup(false);
+      navigate("/");
+    }, 1500);
 
-      // Navigate back to the home screen after a delay
-      setTimeout(() => {
-        setShowPopup(false);
-        navigate("/");
-      }, 1500);
-
-      setIsLoading(false);
-    }
+    setIsLoading(false); // Reset loading state
   };
 
   return (
@@ -335,7 +308,7 @@ function AddTransaction() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Processing...
+                      Adding...
                     </span>
                   ) : (
                     <>
@@ -361,7 +334,7 @@ function AddTransaction() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-gray-800 mb-2">Success!</h3>
-              <p className="text-gray-600 text-lg mb-4">Transaction recorded.</p>
+              <p className="text-gray-600 text-lg mb-4">Transaction recorded locally.</p>
               <p className="text-gray-500 text-sm">Redirecting to home page...</p>
             </div>
           </div>
