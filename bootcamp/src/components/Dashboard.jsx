@@ -130,12 +130,17 @@ function Dashboard() {
     .filter((item) => item > 0)
     .reduce((acc, item) => (acc += item), 0)
     .toFixed(2)
-  const totalExpenses = (amounts.filter((item) => item < 0).reduce((acc, item) => (acc += item), 0) * -1).toFixed(2)
+  const totalExpenses = (
+    amounts.filter((item) => item < 0).reduce((acc, item) => (acc += item), 0) *
+    -1
+  ).toFixed(2)
 
   const categorySummary = {}
   filteredTransactions.forEach((transaction) => {
     if (transaction.amount < 0) {
-      const categoryName = transaction.category ? transaction.category.name : "Uncategorized"
+      const categoryName = transaction.category
+        ? transaction.category.name
+        : "Uncategorized"
       if (!categorySummary[categoryName]) {
         categorySummary[categoryName] = 0
       }
@@ -145,8 +150,8 @@ function Dashboard() {
 
   // Enhanced color palette with more vibrant colors
   const COLORS = [
-    "#4F46E5", // Indigo-600
-    "#0EA5E9", // Sky-500
+    "#6366F1", // Indigo-500
+    "#3B82F6", // Blue-500
     "#10B981", // Emerald-500
     "#F59E0B", // Amber-500
     "#EF4444", // Red-500
@@ -160,20 +165,23 @@ function Dashboard() {
   }
 
   // Calculate percentage for each category
-  const totalExpenseAmount = Object.values(categorySummary).reduce((acc, val) => acc + val, 0)
+  const totalExpenseAmount = Object.values(categorySummary).reduce(
+    (acc, val) => acc + val,
+    0
+  )
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pb-20 pt-6">
-      <div className="container mx-auto px-4 max-w-7xl">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 pb-20 pt-8">
+      <div className="container mx-auto px-4 max-w-6xl">
         {/* Dashboard Title and Home Link */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-            <ChartBarIcon className="h-6 w-6 mr-2 text-indigo-600" />
-            Dashboard
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-slate-800 flex items-center">
+            <ChartBarIcon className="h-8 w-8 mr-3 text-indigo-600" />
+            Financial Dashboard
           </h1>
           <NavLink
             to="/"
-            className="p-2 rounded-full bg-indigo-100 text-indigo-600 hover:bg-indigo-200 transition-colors duration-200"
+            className="p-3 rounded-full bg-white text-indigo-600 hover:bg-indigo-50 transition-colors duration-200 shadow-sm hover:shadow border border-indigo-100"
             aria-label="Home"
           >
             <HomeIcon className="h-5 w-5" />
@@ -182,28 +190,34 @@ function Dashboard() {
 
         {/* Time Filter Section with enhanced styling */}
         <div
-          className={`px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white shadow-md rounded-xl mb-6 border border-gray-100 transition-all duration-500 ${
+          className={`px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white shadow-lg rounded-2xl mb-8 border border-indigo-50 transition-all duration-500 ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
-          style={{ boxShadow: "0 4px 15px rgba(0, 0, 0, 0.05)" }}
+          style={{
+            boxShadow:
+              "0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(99, 102, 241, 0.05)",
+          }}
         >
-          <h2 className="text-lg font-semibold text-gray-800 flex items-center">
+          <h2 className="text-lg font-semibold text-slate-800 flex items-center">
             <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
             Filter by Period:
           </h2>
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-3">
             {["day", "week", "month", "all"].map((period) => (
               <button
                 key={period}
                 onClick={() => setTimeFilter(period)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 focus:outline-none
+                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
                 ${
                   timeFilter === period
                     ? "bg-indigo-600 text-white shadow-md transform scale-105"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200 hover:scale-105"
                 }`}
                 style={{
-                  boxShadow: timeFilter === period ? "0 4px 10px rgba(79, 70, 229, 0.2)" : "none",
+                  boxShadow:
+                    timeFilter === period
+                      ? "0 4px 14px rgba(99, 102, 241, 0.3)"
+                      : "none",
                 }}
               >
                 {period.charAt(0).toUpperCase() + period.slice(1)}
@@ -214,31 +228,40 @@ function Dashboard() {
 
         {/* Summary Cards with enhanced styling and animations */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 transition-all duration-500 ${
+          className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 transition-all duration-500 ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
           style={{ transitionDelay: "100ms" }}
         >
           {/* Balance Card */}
           <div
-            className="bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+            className="bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl relative"
             style={{
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
-              borderTop: "4px solid #4F46E5",
+              boxShadow:
+                "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
             }}
           >
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="p-3 bg-indigo-100 rounded-xl mr-4">
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-indigo-500 to-indigo-600"></div>
+            <div className="p-7">
+              <div className="flex items-center mb-5">
+                <div className="p-3 bg-indigo-100 rounded-xl mr-4 shadow-sm">
                   <CircleStackIcon className="h-7 w-7 text-indigo-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-700">Total Balance</h3>
-                  <p className="text-sm text-gray-500">Overall financial standing</p>
+                  <h3 className="text-lg font-semibold text-slate-800">
+                    Total Balance
+                  </h3>
+                  <p className="text-sm text-slate-500">
+                    Overall financial standing
+                  </p>
                 </div>
               </div>
               <p
-                className={`text-4xl font-bold mt-2 ${Number(totalBalance) >= 0 ? "text-indigo-700" : "text-red-600"}`}
+                className={`text-4xl font-bold mt-3 ${
+                  Number(totalBalance) >= 0
+                    ? "text-indigo-700"
+                    : "text-red-600"
+                }`}
               >
                 {formatCurrency(totalBalance)}
               </p>
@@ -247,106 +270,132 @@ function Dashboard() {
 
           {/* Income Card */}
           <div
-            className="bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+            className="bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl relative"
             style={{
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
-              borderTop: "4px solid #10B981",
+              boxShadow:
+                "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
             }}
           >
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="p-3 bg-green-100 rounded-xl mr-4">
-                  <TrendingUpIcon className="h-7 w-7 text-green-600" />
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-400 to-emerald-500"></div>
+            <div className="p-7">
+              <div className="flex items-center mb-5">
+                <div className="p-3 bg-emerald-100 rounded-xl mr-4 shadow-sm">
+                  <TrendingUpIcon className="h-7 w-7 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-700">Total Income</h3>
-                  <p className="text-sm text-gray-500">Money received</p>
+                  <h3 className="text-lg font-semibold text-slate-800">
+                    Total Income
+                  </h3>
+                  <p className="text-sm text-slate-500">Money received</p>
                 </div>
               </div>
-              <p className="text-4xl font-bold mt-2 text-green-600">{formatCurrency(totalIncome)}</p>
+              <p className="text-4xl font-bold mt-3 text-emerald-600">
+                {formatCurrency(totalIncome)}
+              </p>
             </div>
           </div>
 
           {/* Expenses Card */}
           <div
-            className="bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
+            className="bg-white rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl relative"
             style={{
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
-              borderTop: "4px solid #EF4444",
+              boxShadow:
+                "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
             }}
           >
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className="p-3 bg-red-100 rounded-xl mr-4">
-                  <TrendingDownIcon className="h-7 w-7 text-red-600" />
+            <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-rose-400 to-rose-500"></div>
+            <div className="p-7">
+              <div className="flex items-center mb-5">
+                <div className="p-3 bg-rose-100 rounded-xl mr-4 shadow-sm">
+                  <TrendingDownIcon className="h-7 w-7 text-rose-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-700">Total Expenses</h3>
-                  <p className="text-sm text-gray-500">Money spent</p>
+                  <h3 className="text-lg font-semibold text-slate-800">
+                    Total Expenses
+                  </h3>
+                  <p className="text-sm text-slate-500">Money spent</p>
                 </div>
               </div>
-              <p className="text-4xl font-bold mt-2 text-red-600">{formatCurrency(totalExpenses)}</p>
+              <p className="text-4xl font-bold mt-3 text-rose-600">
+                {formatCurrency(totalExpenses)}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Data Visualization Section */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 transition-all duration-500 ${
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8 transition-all duration-500 ${
             isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
           style={{ transitionDelay: "200ms" }}
         >
           {/* Category Breakdown */}
           <div
-            className="bg-white rounded-2xl overflow-hidden"
+            className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-100"
             style={{
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
+              boxShadow:
+                "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
             }}
           >
-            <div className="px-6 py-4 bg-gradient-to-r from-indigo-50 to-indigo-100 border-b border-indigo-200 flex items-center">
-              <ChartBarIcon className="h-5 w-5 mr-2 text-indigo-600" />
-              <h3 className="font-semibold text-gray-800">Expense Breakdown by Category</h3>
+            <div className="px-7 py-5 bg-gradient-to-r from-indigo-50 via-indigo-100 to-indigo-50 border-b border-indigo-200 flex items-center">
+              <ChartBarIcon className="h-6 w-6 mr-3 text-indigo-600" />
+              <h3 className="font-semibold text-slate-800 text-lg">
+                Expense Breakdown by Category
+              </h3>
             </div>
-            <div className="p-6 min-h-[250px] flex flex-col justify-center">
+            <div className="p-7 min-h-[300px] flex flex-col justify-center">
               {Object.keys(categorySummary).length > 0 ? (
-                <ul className="space-y-4">
+                <ul className="space-y-5">
                   {Object.entries(categorySummary)
                     .sort(([, a], [, b]) => b - a)
                     .map(([name, value], idx) => {
-                      const percentage = totalExpenseAmount ? Math.round((value / totalExpenseAmount) * 100) : 0
+                      const percentage = totalExpenseAmount
+                        ? Math.round((value / totalExpenseAmount) * 100)
+                        : 0
                       return (
                         <li key={name} className="space-y-2">
-                          <div className="flex justify-between items-center text-gray-800">
+                          <div className="flex justify-between items-center text-slate-800">
                             <span className="flex items-center text-base font-medium">
                               <div
-                                className="w-3 h-3 rounded-full mr-2"
-                                style={{ backgroundColor: COLORS[idx % COLORS.length] }}
+                                className="w-4 h-4 rounded-full mr-3 shadow-sm"
+                                style={{
+                                  backgroundColor: COLORS[idx % COLORS.length],
+                                }}
                               ></div>
                               {name}
                             </span>
-                            <span className="text-lg font-semibold">{formatCurrency(value)}</span>
+                            <span className="text-lg font-semibold">
+                              {formatCurrency(value)}
+                            </span>
                           </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                          <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden shadow-inner">
                             <div
-                              className="h-2.5 rounded-full transition-all duration-1000 ease-out"
+                              className="h-3 rounded-full transition-all duration-1000 ease-out"
                               style={{
                                 width: `${percentage}%`,
                                 backgroundColor: COLORS[idx % COLORS.length],
-                                transition: "width 1s ease-out",
+                                transition: "width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                                boxShadow: "0 1px 3px rgba(0,0,0,0.1) inset",
                               }}
                             ></div>
                           </div>
-                          <p className="text-xs text-gray-500 text-right">{percentage}% of total expenses</p>
+                          <p className="text-xs text-slate-500 text-right font-medium">
+                            {percentage}% of total expenses
+                          </p>
                         </li>
                       )
                     })}
                 </ul>
               ) : (
-                <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-xl p-6">
-                  <TagIcon className="h-10 w-10 mx-auto mb-3 text-gray-400" />
-                  <p className="font-medium">No expense data available for this period.</p>
-                  <p className="text-sm mt-2">Add some expenses to see insights here!</p>
+                <div className="text-center py-10 text-slate-500 bg-slate-50 rounded-xl p-8 border border-slate-100">
+                  <TagIcon className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+                  <p className="font-medium text-lg">
+                    No expense data available for this period.
+                  </p>
+                  <p className="text-sm mt-2">
+                    Add some expenses to see insights here!
+                  </p>
                 </div>
               )}
             </div>
@@ -354,94 +403,111 @@ function Dashboard() {
 
           {/* Recent Transactions */}
           <div
-            className="bg-white rounded-2xl overflow-hidden"
+            className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-100"
             style={{
-              boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
+              boxShadow:
+                "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)",
             }}
           >
-            <div className="px-6 py-4 bg-gradient-to-r from-indigo-50 to-indigo-100 border-b border-indigo-200 flex justify-between items-center">
-              <h3 className="font-semibold text-gray-800 flex items-center">
-                <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
+            <div className="px-7 py-5 bg-gradient-to-r from-indigo-50 via-indigo-100 to-indigo-50 border-b border-indigo-200 flex justify-between items-center">
+              <h3 className="font-semibold text-slate-800 flex items-center text-lg">
+                <CalendarIcon className="h-6 w-6 mr-3 text-indigo-600" />
                 Recent Transactions
               </h3>
               <NavLink
                 to="/transactions"
-                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium px-3 py-1 rounded-full hover:bg-indigo-100 transition-colors duration-200"
+                className="text-sm text-indigo-600 hover:text-indigo-800 font-medium px-4 py-1.5 rounded-full hover:bg-indigo-100 transition-colors duration-200 border border-indigo-200 shadow-sm"
               >
                 View All
               </NavLink>
             </div>
             <div className="overflow-x-auto">
               {filteredTransactions.length > 0 ? (
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
+                <table className="min-w-full divide-y divide-slate-200">
+                  <thead className="bg-slate-50">
                     <tr>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-7 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
                       >
                         Date
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-7 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
                       >
                         Description
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-7 py-4 text-left text-xs font-medium text-slate-500 uppercase tracking-wider"
                       >
                         Category
                       </th>
                       <th
                         scope="col"
-                        className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        className="px-7 py-4 text-right text-xs font-medium text-slate-500 uppercase tracking-wider"
                       >
                         Amount
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="bg-white divide-y divide-gray-100">
+                  <tbody className="bg-white divide-y divide-slate-100">
                     {filteredTransactions.slice(0, 5).map((transaction, index) => (
                       <tr
                         key={transaction.id}
-                        className="hover:bg-gray-50 transition-colors duration-150"
+                        className="hover:bg-slate-50 transition-colors duration-150"
                         style={{
-                          animation: `fadeIn 0.5s ease-out ${index * 0.1}s both`,
+                          animation: `fadeIn 0.5s ease-out ${
+                            index * 0.1
+                          }s both`,
                           animationFillMode: "backwards",
                         }}
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        <td className="px-7 py-4 whitespace-nowrap text-sm text-slate-600">
                           {new Date(transaction.date).toLocaleDateString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 truncate max-w-[150px] sm:max-w-none">
+                        <td className="px-7 py-4 whitespace-nowrap text-sm font-medium text-slate-800 truncate max-w-[150px] sm:max-w-none">
                           {transaction.text}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <td className="px-7 py-4 whitespace-nowrap text-sm">
                           <span
-                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium shadow-sm"
                             style={{
                               backgroundColor:
-                                transaction.amount < 0 ? "rgba(239, 68, 68, 0.1)" : "rgba(16, 185, 129, 0.1)",
-                              color: transaction.amount < 0 ? "rgb(185, 28, 28)" : "rgb(4, 120, 87)",
+                                transaction.amount < 0
+                                  ? "rgba(239, 68, 68, 0.1)"
+                                  : "rgba(16, 185, 129, 0.1)",
+                              color:
+                                transaction.amount < 0
+                                  ? "rgb(185, 28, 28)"
+                                  : "rgb(4, 120, 87)",
+                              border:
+                                transaction.amount < 0
+                                  ? "1px solid rgba(239, 68, 68, 0.2)"
+                                  : "1px solid rgba(16, 185, 129, 0.2)",
                             }}
                           >
-                            {transaction.category ? transaction.category.name : "Uncategorized"}
+                            {transaction.category
+                              ? transaction.category.name
+                              : "Uncategorized"}
                           </span>
                         </td>
                         <td
-                          className={`px-6 py-4 whitespace-nowrap text-sm font-semibold text-right ${
-                            transaction.amount < 0 ? "text-red-600" : "text-green-600"
+                          className={`px-7 py-4 whitespace-nowrap text-sm font-semibold text-right ${
+                            transaction.amount < 0
+                              ? "text-rose-600"
+                              : "text-emerald-600"
                           }`}
                         >
                           <span className="inline-flex items-center">
                             {transaction.amount < 0 ? (
-                              <TrendingDownIcon className="h-4 w-4 mr-1" />
+                              <TrendingDownIcon className="h-4 w-4 mr-1.5" />
                             ) : (
-                              <TrendingUpIcon className="h-4 w-4 mr-1" />
+                              <TrendingUpIcon className="h-4 w-4 mr-1.5" />
                             )}
-                            {transaction.amount < 0 ? "-" : "+"} {formatCurrency(Math.abs(transaction.amount))}
+                            {transaction.amount < 0 ? "-" : "+"}{" "}
+                            {formatCurrency(Math.abs(transaction.amount))}
                           </span>
                         </td>
                       </tr>
@@ -449,10 +515,14 @@ function Dashboard() {
                   </tbody>
                 </table>
               ) : (
-                <div className="text-center py-8 text-gray-500 bg-gray-50 m-4 rounded-xl p-6">
-                  <CalendarIcon className="h-10 w-10 mx-auto mb-3 text-gray-400" />
-                  <p className="font-medium">No recent transactions for this period.</p>
-                  <p className="text-sm mt-2">Your recent activity will show up here.</p>
+                <div className="text-center py-10 text-slate-500 bg-slate-50 m-5 rounded-xl p-8 border border-slate-100">
+                  <CalendarIcon className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+                  <p className="font-medium text-lg">
+                    No recent transactions for this period.
+                  </p>
+                  <p className="text-sm mt-2">
+                    Your recent activity will show up here.
+                  </p>
                 </div>
               )}
             </div>
@@ -463,8 +533,14 @@ function Dashboard() {
       {/* Add CSS animations */}
       <style jsx>{`
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(15px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
       `}</style>
     </div>
