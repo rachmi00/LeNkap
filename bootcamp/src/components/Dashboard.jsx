@@ -1,38 +1,29 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Changed from next/navigation
+// src/components/Dashboard.jsx
+import React, { useState, useEffect } from "react";
+// No useRouter or useNavigate here, as Dashboard is assumed to be a display route
+// and not directly handling navigation to signup in this specific component.
+// Navigation will be handled by a higher-level routing component (e.g., App.jsx).
+
 import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
 import { motion } from "framer-motion";
 
-import DateComponent from "./date-component";
-import BottomNavBar from "./bottom-nav-bar";
-import Expense from "./expense";
-import Income from "./income";
-import TransactionList from "./transaction-list";
+// Your custom components for financial data - IMPORTED AS-IS
+import Balance from "./Balance";       // No modification to Balance.jsx
+import Expense from "./Expense";       // No modification to Expense.jsx
+import Income from "./Income";         // No modification to Income.jsx
 
+// Other common components
+import DateComponent from "./date-component";    // Date formatting
+import TransactionList from "./transaction-list"; // List of transactions
+import BottomNavBar from "./bottom-nav-bar";    // Fixed bottom navigation
 
-export default function Home() {
-  const navigate = useNavigate(); // This is from react-router-dom
-  const isVisibleStored = typeof window !== "undefined" ? localStorage.getItem("isButtonVisible") : null;
-  const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true);
+export default function Dashboard() {
   const [isLoaded, setIsLoaded] = useState(false); // For initial animation
 
   useEffect(() => {
-    setIsLoaded(true); // Trigger initial animation on mount
-
-    if (!isVisible) {
-      const timeout = setTimeout(() => {
-        setIsVisible(true);
-        localStorage.setItem("isButtonVisible", "true");
-      }, 600000); // 10 minutes
-      return () => clearTimeout(timeout);
-    }
-  }, [isVisible]);
-
-  const hideButton = () => {
-    setIsVisible(false);
-    localStorage.setItem("isButtonVisible", "false");
-    navigate("/signup"); // Use navigate from react-router-dom
-  };
+    // Trigger initial animation on component mount
+    setIsLoaded(true);
+  }, []);
 
   // Framer Motion animation variants
   const fadeIn = {
@@ -47,49 +38,34 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col font-sans antialiased text-gray-800">
       <div className="max-w-6xl mx-auto w-full flex-grow px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-        {/* Header Section */}
+
+        {/* Dashboard Header & Balance */}
         <motion.div
           initial="hidden"
           animate={isLoaded ? "visible" : "hidden"}
           variants={fadeIn}
-          className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-b-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 mb-8 md:mb-10 mt-0 md:mt-8 overflow-hidden"
+          className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-b-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 mb-8 md:mb-10 mt-0 md:mt-8 overflow-hidden text-white"
         >
           <section className="flex items-center space-x-2 text-blue-100 mb-4">
             <CalendarIcon className="h-5 w-5" />
             <DateComponent />
           </section>
 
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-            <motion.h1
-              className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4 md:mb-0"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              Welcome to Le Nkap
-              <span className="block text-lg sm:text-xl font-normal text-blue-100 mt-1 opacity-90">
-                Your personal finance tracker
-              </span>
-            </motion.h1>
-
-            {isVisible && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.4, duration: 0.3 }}
-              >
-                <button
-                  className="w-full md:w-auto bg-white text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700 font-semibold py-3 px-6 rounded-xl transition duration-300 shadow-md flex items-center justify-center text-lg"
-                  onClick={hideButton}
-                >
-                  Get Started
-                </button>
-              </motion.div>
-            )}
+          <div className="mb-6">
+            <h1 className="text-xl sm:text-2xl font-semibold text-blue-100 leading-tight mb-2">
+              Current Balance
+            </h1>
+            {/* Display the total balance using your Balance component. */}
+            {/* IMPORTANT: Styling for Balance is applied to a wrapper div here,
+                        as Balance.jsx itself is not modified to accept className. */}
+            <div className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+              <Balance />
+            </div>
           </div>
 
-          {/* Summary Cards */}
+          {/* Summary Cards for Total Expense and Total Income */}
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {/* Total Expense Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -101,10 +77,14 @@ export default function Home() {
                 <div className="p-3 bg-red-500/30 rounded-lg mr-4">
                   <ArrowDownIcon className="h-6 w-6 text-red-200" />
                 </div>
-                <Expense className="text-2xl sm:text-3xl font-bold text-white tracking-tight" />
+                {/* Styling for Expense is applied to a wrapper div here. */}
+                <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  <Expense />
+                </div>
               </div>
             </motion.div>
 
+            {/* Total Income Card */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -116,13 +96,16 @@ export default function Home() {
                 <div className="p-3 bg-green-500/30 rounded-lg mr-4">
                   <ArrowUpIcon className="h-6 w-6 text-green-200" />
                 </div>
-                <Income className="text-2xl sm:text-3xl font-bold text-white tracking-tight" />
+                {/* Styling for Income is applied to a wrapper div here. */}
+                <div className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  <Income />
+                </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
 
-        {/* Financial Overview */}
+        {/* Financial Overview Section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -171,7 +154,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Transactions Section */}
+        {/* Recent Transactions Section */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
