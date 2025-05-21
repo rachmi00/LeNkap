@@ -163,64 +163,60 @@ function Dashboard() {
   const totalExpenseAmount = Object.values(categorySummary).reduce((acc, val) => acc + val, 0)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pb-20">
-      {/* Enhanced Header with subtle animation */}
-      <nav
-        className={`w-full bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-4 shadow-lg sticky top-0 z-10 transition-all duration-300 ${isLoaded ? "opacity-100" : "opacity-0"}`}
-        style={{
-          backgroundImage: "linear-gradient(135deg, #4F46E5 0%, #2563EB 100%)",
-          boxShadow: "0 4px 20px rgba(79, 70, 229, 0.2)",
-        }}
-      >
-        <div className="container mx-auto flex justify-between items-center max-w-7xl">
-          <h1 className="text-white text-xl font-bold flex items-center">
-            <ChartBarIcon className="h-6 w-6 mr-2 text-blue-200" />
-            <span className="tracking-tight">Financial Dashboard</span>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pb-20 pt-6">
+      <div className="container mx-auto px-4 max-w-7xl">
+        {/* Dashboard Title and Home Link */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+            <ChartBarIcon className="h-6 w-6 mr-2 text-indigo-600" />
+            Dashboard
           </h1>
           <NavLink
             to="/"
-            className="text-white hover:text-blue-200 transition-colors duration-200 p-2 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
+            className="p-2 rounded-full bg-indigo-100 text-indigo-600 hover:bg-indigo-200 transition-colors duration-200"
             aria-label="Home"
           >
             <HomeIcon className="h-5 w-5" />
           </NavLink>
         </div>
-      </nav>
 
-      {/* Time Filter Section with enhanced styling */}
-      <div
-        className={`container mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white shadow-md rounded-xl mt-6 max-w-7xl border border-gray-100 transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-        style={{ boxShadow: "0 4px 15px rgba(0, 0, 0, 0.05)" }}
-      >
-        <h2 className="text-lg font-semibold text-gray-800 flex items-center">
-          <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
-          Filter by Period:
-        </h2>
-        <div className="flex flex-wrap justify-center gap-2">
-          {["day", "week", "month", "all"].map((period) => (
-            <button
-              key={period}
-              onClick={() => setTimeFilter(period)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 focus:outline-none
+        {/* Time Filter Section with enhanced styling */}
+        <div
+          className={`px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white shadow-md rounded-xl mb-6 border border-gray-100 transition-all duration-500 ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+          style={{ boxShadow: "0 4px 15px rgba(0, 0, 0, 0.05)" }}
+        >
+          <h2 className="text-lg font-semibold text-gray-800 flex items-center">
+            <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
+            Filter by Period:
+          </h2>
+          <div className="flex flex-wrap justify-center gap-2">
+            {["day", "week", "month", "all"].map((period) => (
+              <button
+                key={period}
+                onClick={() => setTimeFilter(period)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 focus:outline-none
                 ${
                   timeFilter === period
                     ? "bg-indigo-600 text-white shadow-md transform scale-105"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105"
                 }`}
-              style={{
-                boxShadow: timeFilter === period ? "0 4px 10px rgba(79, 70, 229, 0.2)" : "none",
-              }}
-            >
-              {period.charAt(0).toUpperCase() + period.slice(1)}
-            </button>
-          ))}
+                style={{
+                  boxShadow: timeFilter === period ? "0 4px 10px rgba(79, 70, 229, 0.2)" : "none",
+                }}
+              >
+                {period.charAt(0).toUpperCase() + period.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-6 max-w-7xl">
         {/* Summary Cards with enhanced styling and animations */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 transition-all duration-500 ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
           style={{ transitionDelay: "100ms" }}
         >
           {/* Balance Card */}
@@ -296,7 +292,9 @@ function Dashboard() {
 
         {/* Data Visualization Section */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 transition-all duration-500 ${
+            isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
           style={{ transitionDelay: "200ms" }}
         >
           {/* Category Breakdown */}
