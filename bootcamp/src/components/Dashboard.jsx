@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DateComponent from "./DateComponent";
-import { CalendarIcon, ChartBarIcon } from '@heroicons/react/solid';
+import { CalendarIcon, ChartBarIcon } from '@heroicons/react/solid'; // Using solid icons for clarity
 import BottomNavBar from "./BottomNavBar";
 import Expense from "./Expense";
 import Income from "./Income";
@@ -30,59 +30,57 @@ function Home() {
 
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col font-sans antialiased text-gray-800">
-      <div className="max-w-7xl mx-auto w-full flex-grow px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      <div className="max-w-xl mx-auto w-full flex-grow px-4 sm:px-6 py-6 md:py-8"> {/* Reduced max-width for a more mobile-first, app-like feel */}
 
         {/* Header Section */}
-        <div className="relative bg-gradient-to-br from-blue-500 to-blue-700 rounded-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 mb-8 md:mb-12 overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-[1.005]">
-          <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none z-0"></div>
-
-          <section className="relative z-10 flex items-center space-x-2 text-blue-100 font-medium text-sm mb-4">
+        <div className="bg-white rounded-3xl shadow-lg p-6 sm:p-8 mb-8"> {/* Changed to white background, rounded corners, softer shadow */}
+          <section className="flex items-center space-x-2 text-gray-500 font-medium text-sm mb-4">
             <CalendarIcon className="h-5 w-5" />
             <DateComponent />
           </section>
 
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4 md:mb-0">
+          <div className="flex items-center justify-between mb-6"> {/* Simplified flexbox for consistent spacing */}
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight"> {/* Darker, bolder text for primary emphasis */}
               Hello, Le Nkap User
             </h1>
 
             {isVisible && (
               <button
-                className="w-full md:w-auto bg-white text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50 font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 active:shadow-md text-lg"
+                className="bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-semibold py-2 px-5 rounded-full transition duration-200 ease-in-out shadow-md text-base md:text-lg whitespace-nowrap flex-shrink-0" /* Adjusted button style for app-like CTA */
                 onClick={hideButton}
               >
                 Get Started
               </button>
             )}
           </div>
+        </div>
 
-          {/* Summary Cards */}
-          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-5 sm:p-6 shadow-md border border-white/30 transform transition-all duration-300 ease-in-out hover:scale-[1.02]">
-              <p className="text-blue-100 text-sm font-medium mb-3">Total Expense</p>
-              <div className="flex items-center">
-                <div className="p-3 bg-red-400/40 rounded-full mr-4 flex-shrink-0">
-                  <ChartBarIcon className="h-6 w-6 text-red-100" />
-                </div>
-                <Expense className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight leading-none" />
+        {/* Summary Cards - Moved outside header for clearer separation, like many app designs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8"> {/* Consistent gap */}
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"> {/* White background, subtle shadow and border for distinct cards */}
+            <p className="text-sm font-medium text-gray-600 mb-2">Total Expense</p>
+            <div className="flex items-center">
+              <div className="p-2 bg-red-100 rounded-lg mr-3 flex-shrink-0"> {/* Lighter, square background for icons */}
+                <ChartBarIcon className="h-5 w-5 text-red-500" /> {/* Red icon for expense */}
               </div>
+              <Expense className="text-2xl font-bold text-gray-900" /> {/* Dark, bold text for figures */}
             </div>
+          </div>
 
-            <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-5 sm:p-6 shadow-md border border-white/30 transform transition-all duration-300 ease-in-out hover:scale-[1.02]">
-              <p className="text-blue-100 text-sm font-medium mb-3">Total Income</p>
-              <div className="flex items-center">
-                <div className="p-3 bg-green-400/40 rounded-full mr-4 flex-shrink-0">
-                  <ChartBarIcon className="h-6 w-6 text-green-100" />
-                </div>
-                <Income className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight leading-none" />
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"> {/* White background, subtle shadow and border */}
+            <p className="text-sm font-medium text-gray-600 mb-2">Total Income</p>
+            <div className="flex items-center">
+              <div className="p-2 bg-green-100 rounded-lg mr-3 flex-shrink-0"> {/* Lighter, square background for icons */}
+                <ChartBarIcon className="h-5 w-5 text-green-500" /> {/* Green icon for income */}
               </div>
+              <Income className="text-2xl font-bold text-gray-900" /> {/* Dark, bold text for figures */}
             </div>
           </div>
         </div>
 
         {/* Transactions Section */}
-        <section className="bg-white rounded-3xl shadow-xl p-5 sm:p-8 md:p-10 mb-8 transform transition-all duration-300 ease-in-out hover:scale-[1.005]">
-          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Recent Transactions</h2>
+        <section className="bg-white rounded-3xl shadow-lg p-5 sm:p-6 mb-20 md:mb-8"> {/* White background, consistent rounding, strong shadow */}
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5">Recent Transactions</h2> {/* Darker, bolder heading */}
           <TransactionList />
         </section>
       </div>
