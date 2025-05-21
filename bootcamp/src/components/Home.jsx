@@ -1,67 +1,215 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import DateComponent from "./DateComponent";
-import { CalendarIcon } from '@heroicons/react/solid';
-import BottomNavBar from "./BottomNavBar";
-import Expense from "./Expense";
-import Income from "./Income";
-import TransactionList from "./TransactionList";
-import axios from "axios";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Correct import for react-router-dom navigation
+import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
+import { motion } from "framer-motion";
 
-function Home() {
-  const navigate = useNavigate();
-  const isVisibleStored = localStorage.getItem("isButtonVisible");
+// Assuming these are your custom components located in the same directory or correctly aliased
+import DateComponent from "./date-component";
+import BottomNavBar from "./bottom-nav-bar";
+import Expense from "./expense";
+import Income from "./income";
+import TransactionList from "./transaction-list";
+
+export default function Home() {
+  const navigate = useNavigate(); // Hook from react-router-dom for navigation
+
+  // State to manage the visibility of the "Get Started" button for new users
+  // Access localStorage only on the client side to prevent SSR issues with Vite
+  const isVisibleStored = typeof window !== "undefined" ? localStorage.getItem("isButtonVisible") : null;
   const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true);
 
+  // State to control the initial fade-in animation of the main content
+  const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
+    // Set isLoaded to true after component mounts to trigger initial animations
+    setIsLoaded(true);
+
+    // If the button is currently hidden, set a timeout to make it visible again after 10 minutes
     if (!isVisible) {
       const timeout = setTimeout(() => {
         setIsVisible(true);
-        localStorage.setItem("isButtonVisible", "true");
-      }, 600000);
-      return () => clearTimeout(timeout);
+        localStorage.setItem("isButtonVisible", "true"); // Persist visibility state
+      }, 600000); // 10 minutes (600,000 milliseconds)
+      return () => clearTimeout(timeout); // Cleanup the timeout if the component unmounts or isVisible changes
     }
-  }, [isVisible]);
+  }, [isVisible]); // Re-run effect if isVisible changes
 
+  // Function to hide the "Get Started" button and navigate to the signup page
   const hideButton = () => {
     setIsVisible(false);
-    localStorage.setItem("isButtonVisible", "false");
-    navigate('/signup');
+    localStorage.setItem("isButtonVisible", "false"); // Persist hidden state
+    navigate("/signup"); // Navigate using react-router-dom's navigate function
+  };
+
+  // Framer Motion animation variants for a smooth fade-in effect
+  const fadeIn = {
+    hidden: { opacity: 0, y: 20 }, // Initial state: invisible and slightly below position
+    visible: {
+      opacity: 1, // Final state: fully visible
+      y: 0,       // Final state: at original Y position
+      transition: { duration: 0.5 }, // Animation duration
+    },
   };
 
   return (
-    <main className="min-h-screen bg-blue-50 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-blue-700 rounded-lg p-6 mb-6 shadow-lg">
-          <section className="flex items-center space-x-2">
-            <CalendarIcon className="h-6 w-6 text-white" />
-            <DateComponent className="text-white" />
-          </section>
-          <h1 className="text-2xl font-bold text-white mt-2">Hello Le Nkap User</h1>
-          <section className="mt-4">
-            <p className="text-white font-medium">Expense: <Expense /></p>
-            <p className="text-white font-medium">Income: <Income /></p>
-          </section>
-        </div>
+    // Main container for the entire page, setting min-height, background gradient, and font styles
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col font-sans antialiased text-gray-800">
+      {/* Content wrapper with max-width, auto margins for centering, and responsive padding */}
+      <div className="max-w-6xl mx-auto w-full flex-grow px-4 sm:px-6 lg:px-8 py-6 md:py-8">
 
-        <section className="bg-white rounded-lg p-6 shadow-lg">
-          <TransactionList />
-          {isVisible && (
-            <div className="flex justify-center mt-6">
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
-                onClick={hideButton}
+        {/* Header Section - Wrapped in motion.div for initial fade-in animation */}
+        <motion.div
+          initial="hidden" // Start with the 'hidden' variant
+          animate={isLoaded ? "visible" : "hidden"} // Animate to 'visible' when isLoaded is true
+          variants={fadeIn} // Apply the defined fadeIn animation variants
+          className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-b-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 mb-8 md:mb-10 mt-0 md:mt-8 overflow-hidden"
+        >
+          {/* Date Component Section */}
+          <section className="flex items-center space-x-2 text-blue-100 mb-4">
+            <CalendarIcon className="h-5 w-5" />
+            <DateComponent />
+          </section>
+
+          {/* Welcome Message and Get Started Button */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+            {/* Welcome Title - Wrapped in motion.h1 for a subtle slide-in animation */}
+            <motion.h1
+              className="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4 md:mb-0"
+              initial={{ opacity: 0, x: -20 }} // Initial state: invisible and slightly left
+              animate={{ opacity: 1, x: 0 }}   // Final state: visible and at original X position
+              transition={{ delay: 0.2, duration: 0.5 }} // Animation delay and duration
+            >
+              Welcome to Le Nkap
+              {/* Subtitle for the finance tracker */}
+              <span className="block text-lg sm:text-xl font-normal text-blue-100 mt-1 opacity-90">
+                Your personal finance tracker
+              </span>
+            </motion.h1>
+
+            {/* Get Started Button - Conditionally rendered and wrapped in motion.div for animation */}
+            {isVisible && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }} // Initial state: invisible and slightly smaller
+                animate={{ opacity: 1, scale: 1 }}   // Final state: visible and normal size
+                transition={{ delay: 0.4, duration: 0.3 }} // Animation delay and duration
               >
-                Click here to get started!
-              </button>
-            </div>
-          )}
-        </section>
+                {/* Custom styled button (no shadcn) */}
+                <button
+                  className="w-full md:w-auto bg-white text-blue-700 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-700 font-semibold py-3 px-6 rounded-xl transition duration-300 shadow-md flex items-center justify-center text-lg"
+                  onClick={hideButton}
+                >
+                  Get Started
+                </button>
+              </motion.div>
+            )}
+          </div>
 
-        <BottomNavBar />
+          {/* Summary Cards for Total Expense and Total Income */}
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {/* Total Expense Card - Wrapped in motion.div for animation */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.4 }}
+              className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"
+            >
+              <p className="text-blue-100 text-sm font-medium mb-2">Total Expense</p>
+              <div className="flex items-center">
+                <div className="p-3 bg-red-500/30 rounded-lg mr-4">
+                  <ArrowDownIcon className="h-6 w-6 text-red-200" /> {/* Down arrow for expense */}
+                </div>
+                <Expense className="text-2xl sm:text-3xl font-bold text-white tracking-tight" />
+              </div>
+            </motion.div>
+
+            {/* Total Income Card - Wrapped in motion.div for animation */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+              className="bg-white/15 backdrop-blur-md rounded-2xl p-5 shadow-lg flex flex-col"
+            >
+              <p className="text-blue-100 text-sm font-medium mb-2">Total Income</p>
+              <div className="flex items-center">
+                <div className="p-3 bg-green-500/30 rounded-lg mr-4">
+                  <ArrowUpIcon className="h-6 w-6 text-green-200" /> {/* Up arrow for income */}
+                </div>
+                <Income className="text-2xl sm:text-3xl font-bold text-white tracking-tight" />
+              </div>
+            </motion.div>
+          </div>
+        </motion.div> {/* Correctly closing the main Header Section motion.div */}
+
+        {/* Financial Overview Section - Wrapped in motion.section for animation */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.4 }}
+          className="mb-8"
+        >
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Financial Overview</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Card 1: Savings Rate - Custom styled div (no shadcn Card) */}
+            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-gray-500">Savings Rate</h3>
+                <div className="p-2 bg-blue-100 rounded-full">
+                  <TrendingUpIcon className="h-4 w-4 text-blue-600" />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-gray-900">24%</p>
+              <p className="text-sm text-green-600 flex items-center mt-2">
+                <ArrowUpIcon className="h-3 w-3 mr-1" /> 3% from last month
+              </p>
+            </div>
+
+            {/* Card 2: Monthly Budget - Custom styled div (no shadcn Card) */}
+            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-gray-500">Monthly Budget</h3>
+                <div className="p-2 bg-purple-100 rounded-full">
+                  <BarChart3Icon className="h-4 w-4 text-purple-600" />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-gray-900">75% Used</p>
+              <p className="text-sm text-gray-600 mt-2">5 days remaining</p>
+            </div>
+
+            {/* Card 3: Top Category - Custom styled div (no shadcn Card) */}
+            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-gray-500">Top Category</h3>
+                <div className="p-2 bg-amber-100 rounded-full">
+                  <BarChart3Icon className="h-4 w-4 text-amber-600" />
+                </div>
+              </div>
+              <p className="text-2xl font-bold text-gray-900">Groceries</p>
+              <p className="text-sm text-gray-600 mt-2">32% of total expenses</p>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Transactions Section - Wrapped in motion.section for animation */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.4 }}
+          className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 md:p-8 mb-8"
+        >
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold text-gray-800">Recent Transactions</h2>
+            {/* Custom styled button (no shadcn) */}
+            <button className="text-blue-600 hover:text-blue-800 font-medium px-3 py-2 rounded-md transition-colors duration-200">
+              View All
+            </button>
+          </div>
+          <TransactionList />
+        </motion.section>
       </div>
+
+      {/* Bottom Navigation Bar */}
+      <BottomNavBar />
     </main>
   );
 }
-
-export default Home;
