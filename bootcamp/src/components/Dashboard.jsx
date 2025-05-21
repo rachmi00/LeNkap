@@ -1,10 +1,8 @@
-// src/components/Dashboard.jsx
 import React, { useState, useEffect } from "react";
 // No useRouter or useNavigate here, as Dashboard is assumed to be a display route
 // and not directly handling navigation to signup in this specific component.
 // Navigation will be handled by a higher-level routing component (e.g., App.jsx).
 
-import { CalendarIcon, BarChart3Icon, TrendingUpIcon, ArrowUpIcon, ArrowDownIcon } from 'lucide-react';
 import { motion } from "framer-motion";
 
 // Your custom components for financial data - IMPORTED AS-IS
@@ -16,6 +14,105 @@ import Income from "./Income";         // No modification to Income.jsx
 import DateComponent from "./date-component";    // Date formatting
 import TransactionList from "./transaction-list"; // List of transactions
 import BottomNavBar from "./bottom-nav-bar";    // Fixed bottom navigation
+
+// --- INLINE SVG ICON COMPONENTS ---
+// These replace lucide-react icons to remove external dependency
+
+const CalendarIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+);
+
+const BarChart3Icon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 20V10"></path>
+    <path d="M18 20V4"></path>
+    <path d="M6 20v-4"></path>
+  </svg>
+);
+
+const TrendingUpIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+    <polyline points="16 7 22 7 22 13"></polyline>
+  </svg>
+);
+
+const ArrowUpIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <line x1="12" y1="19" x2="12" y2="5"></line>
+    <polyline points="5 12 12 5 19 12"></polyline>
+  </svg>
+);
+
+const ArrowDownIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <line x1="12" y1="5" x2="12" y2="19"></line>
+    <polyline points="19 12 12 19 5 12"></polyline>
+  </svg>
+);
+
+// --- END INLINE SVG ICON COMPONENTS ---
+
 
 export default function Dashboard() {
   const [isLoaded, setIsLoaded] = useState(false); // For initial animation
@@ -56,7 +153,7 @@ export default function Dashboard() {
               Current Balance
             </h1>
             {/* Display the total balance using your Balance component. */}
-            {/* IMPORTANT: Styling for Balance is applied to a wrapper div here,
+            {/* Styling for Balance is applied to a wrapper div here,
                         as Balance.jsx itself is not modified to accept className. */}
             <div className="text-4xl sm:text-5xl font-extrabold tracking-tight">
               <Balance />
