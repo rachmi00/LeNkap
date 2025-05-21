@@ -143,8 +143,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-20"> {/* Added pb-20 for bottom nav padding */}
-      {/* Top Navigation Bar - Smaller and more refined */}
+    <div className="min-h-screen bg-gray-100 pb-20">
       <nav className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 px-4 py-3 shadow-md">
         <div className="container mx-auto flex justify-between items-center max-w-7xl">
           <h1 className="text-white text-lg font-semibold flex items-center">
@@ -160,7 +159,6 @@ function Dashboard() {
         </div>
       </nav>
 
-      {/* Filter Controls - Clean and aligned */}
       <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 bg-white shadow-sm rounded-lg mt-4 max-w-7xl">
         <h2 className="text-lg font-semibold text-gray-800 flex items-center">
           <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
@@ -183,10 +181,8 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Main Dashboard Grid - More balanced and spaced */}
       <div className="container mx-auto px-4 py-6 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Balance Card */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition-all hover:scale-[1.01] hover:shadow-xl">
             <div className="p-5">
               <div className="flex items-center mb-3">
@@ -202,7 +198,6 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Income Card */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition-all hover:scale-[1.01] hover:shadow-xl">
             <div className="p-5">
               <div className="flex items-center mb-3">
@@ -216,7 +211,6 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Expenses Card */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden transform transition-all hover:scale-[1.01] hover:shadow-xl">
             <div className="p-5">
               <div className="flex items-center mb-3">
@@ -231,9 +225,7 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Charts & Breakdown Section - Improved visual separation */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          {/* Expense Breakdown (Non-Chart) */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center">
               <ChartBarIcon className="h-5 w-5 mr-2 text-indigo-600" />
@@ -242,10 +234,10 @@ function Dashboard() {
             <div className="p-6 min-h-[250px] flex flex-col justify-center">
               {Object.keys(categorySummary).length > 0 ? (
                 <ul className="space-y-3">
-                  {Object.entries(categorySummary).sort(([, a], [, b]) => b - a).map(([name, value], index) => (
+                  {Object.entries(categorySummary).sort(([, a], [, b]) => b - a).map(([name, value], idx) => ( // Changed 'index' to 'idx' to avoid potential conflicts
                     <li key={name} className="flex justify-between items-center text-gray-800">
                       <span className="flex items-center text-base font-medium">
-                        <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                        <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div> {/* Changed 'index' to 'idx' */}
                         {name}
                       </span>
                       <span className="text-lg font-semibold">{formatCurrency(value)}</span>
@@ -261,7 +253,6 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Recent Transactions List */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
               <h3 className="font-semibold text-gray-700 flex items-center">
@@ -269,7 +260,7 @@ function Dashboard() {
                 Recent Transactions
               </h3>
               <NavLink
-                to="/transactions" {/* Assuming a full transactions page exists */}
+                to="/transactions"
                 className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
               >
                 View All
