@@ -11,7 +11,7 @@ function Home() {
   const navigate = useNavigate();
   const isVisibleStored = localStorage.getItem("isButtonVisible");
   const [isVisible, setIsVisible] = useState(isVisibleStored ? JSON.parse(isVisibleStored) : true);
-  
+
   useEffect(() => {
     if (!isVisible) {
       const timeout = setTimeout(() => {
@@ -21,7 +21,7 @@ function Home() {
       return () => clearTimeout(timeout);
     }
   }, [isVisible]);
-  
+
   const hideButton = () => {
     setIsVisible(false);
     localStorage.setItem("isButtonVisible", "false");
@@ -29,58 +29,64 @@ function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      <div className="max-w-5xl mx-auto px-4">
+    <main className="min-h-screen bg-gray-50 flex flex-col font-sans antialiased text-gray-800">
+      <div className="max-w-7xl mx-auto w-full flex-grow px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-b-2xl md:rounded-2xl shadow-lg p-6 mb-6 mt-0 md:mt-6">
-          <section className="flex items-center space-x-2 text-blue-100">
+        <div className="relative bg-gradient-to-br from-blue-500 to-blue-700 rounded-3xl md:rounded-3xl shadow-xl p-6 sm:p-8 md:p-10 mb-8 md:mb-12 overflow-hidden transform transition-all duration-300 ease-in-out hover:scale-[1.005]">
+          <div className="absolute inset-0 bg-pattern-light opacity-5 pointer-events-none z-0"></div>
+
+          <section className="relative z-10 flex items-center space-x-2 text-blue-100 font-medium text-sm mb-4">
             <CalendarIcon className="h-5 w-5" />
             <DateComponent />
           </section>
-          
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-3">
-            <h1 className="text-2xl font-bold text-white">Hello, Le Nkap User</h1>
-            
+
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-4 md:mb-0">
+              Hello, Le Nkap User
+            </h1>
+
             {isVisible && (
               <button
-                className="mt-4 md:mt-0 bg-white text-blue-700 hover:bg-blue-50 font-medium py-2 px-4 rounded-lg transition duration-200 shadow-md flex items-center justify-center"
+                className="w-full md:w-auto bg-white text-blue-700 hover:bg-blue-100 focus:outline-none focus:ring-4 focus:ring-white focus:ring-opacity-50 font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 active:shadow-md text-lg"
                 onClick={hideButton}
               >
                 Get Started
               </button>
             )}
           </div>
-          
+
           {/* Summary Cards */}
-          <div className="mt-6 grid grid-cols-2 gap-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 shadow-sm">
-              <p className="text-blue-100 text-sm font-medium mb-1">Total Expense</p>
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-5 sm:p-6 shadow-md border border-white/30 transform transition-all duration-300 ease-in-out hover:scale-[1.02]">
+              <p className="text-blue-100 text-sm font-medium mb-3">Total Expense</p>
               <div className="flex items-center">
-                <div className="p-2 bg-red-500/20 rounded-lg mr-3">
-                  <ChartBarIcon className="h-5 w-5 text-red-200" />
+                <div className="p-3 bg-red-400/40 rounded-full mr-4 flex-shrink-0">
+                  <ChartBarIcon className="h-6 w-6 text-red-100" />
                 </div>
-                <Expense className="text-xl md:text-2xl font-bold text-white" />
+                <Expense className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight leading-none" />
               </div>
             </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 shadow-sm">
-              <p className="text-blue-100 text-sm font-medium mb-1">Total Income</p>
+
+            <div className="bg-white/20 backdrop-blur-lg rounded-2xl p-5 sm:p-6 shadow-md border border-white/30 transform transition-all duration-300 ease-in-out hover:scale-[1.02]">
+              <p className="text-blue-100 text-sm font-medium mb-3">Total Income</p>
               <div className="flex items-center">
-                <div className="p-2 bg-green-500/20 rounded-lg mr-3">
-                  <ChartBarIcon className="h-5 w-5 text-green-200" />
+                <div className="p-3 bg-green-400/40 rounded-full mr-4 flex-shrink-0">
+                  <ChartBarIcon className="h-6 w-6 text-green-100" />
                 </div>
-                <Income className="text-xl md:text-2xl font-bold text-white" />
+                <Income className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight leading-none" />
               </div>
             </div>
           </div>
         </div>
-        
+
         {/* Transactions Section */}
-        <section className="bg-white rounded-xl shadow-md mb-20">
+        <section className="bg-white rounded-3xl shadow-xl p-5 sm:p-8 md:p-10 mb-8 transform transition-all duration-300 ease-in-out hover:scale-[1.005]">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6">Recent Transactions</h2>
           <TransactionList />
         </section>
       </div>
-      
+
       <BottomNavBar />
     </main>
   );
