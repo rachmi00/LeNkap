@@ -1,9 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalState";
 import { NavLink } from "react-router-dom";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
 
-// Modern icon components with consistent styling
 const HomeIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -89,27 +87,13 @@ const CalendarIcon = (props) => (
 function Dashboard() {
   const { transactions } = useContext(GlobalContext);
   const [timeFilter, setTimeFilter] = useState("all");
-  const [pieData, setPieData] = useState([]);
-  const [trendData, setTrendData] = useState([]);
 
-  // Calculate totals
-  const amounts = transactions.map((transaction) => transaction.amount);
-  const totalBalance = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
-  const totalIncome = amounts
-    .filter((item) => item > 0)
-    .reduce((acc, item) => (acc += item), 0)
-    .toFixed(2);
-  const totalExpenses = (
-    amounts.filter((item) => item < 0).reduce((acc, item) => (acc += item), 0) * -1
-  ).toFixed(2);
-
-  // Calculate filtered transactions based on time period
   const getFilteredTransactions = () => {
     if (timeFilter === "all") return transactions;
-    
+
     const now = new Date();
     let startDate;
-    
+
     switch(timeFilter) {
       case "month":
         startDate = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -124,46 +108,41 @@ function Dashboard() {
       default:
         return transactions;
     }
-    
+
     return transactions.filter(t => new Date(t.date) >= startDate);
   };
 
-  // Calculate category breakdown for expenses
-  useEffect(() => {
-    const filteredTransactions = getFilteredTransactions();
-    
-    // Prepare category data for pie chart
-    const categorySummary = {};
-    filteredTransactions.forEach(transaction => {
-      if (transaction.amount < 0) { // Only expenses for the pie chart
-        const categoryName = transaction.category ? transaction.category.name : "Uncategorized";
-        if (!categorySummary[categoryName]) {
-          categorySummary[categoryName] = 0;
-        }
-        categorySummary[categoryName] += Math.abs(transaction.amount);
-      }
-    });
-    
-    // Convert to array format for recharts
-    const pieChartData = Object.entries(categorySummary).map(([name, value]) => ({
-      name,
-      value
-    }));
-    
-    setPieData(pieChartData);
-  }, [transactions, timeFilter]);
+  const filteredTransactions = getFilteredTransactions();
 
-  // Colors for pie chart
+  const amounts = filteredTransactions.map((transaction) => transaction.amount);
+  const totalBalance = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
+  const totalIncome = amounts
+    .filter((item) => item > 0)
+    .reduce((acc, item) => (acc += item), 0)
+    .toFixed(2);
+  const totalExpenses = (
+    amounts.filter((item) => item < 0).reduce((acc, item) => (acc += item), 0) * -1
+  ).toFixed(2);
+
+  const categorySummary = {};
+  filteredTransactions.forEach(transaction => {
+    if (transaction.amount < 0) {
+      const categoryName = transaction.category ? transaction.category.name : "Uncategorized";
+      if (!categorySummary[categoryName]) {
+        categorySummary[categoryName] = 0;
+      }
+      categorySummary[categoryName] += Math.abs(transaction.amount);
+    }
+  });
+
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#8dd1e1'];
 
-  // Format currency
   const formatCurrency = (amount) => {
     return `FCFA ${Number(amount).toLocaleString()}`;
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation Bar */}
       <nav className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-4 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-white text-xl font-bold flex items-center">
@@ -181,10 +160,9 @@ function Dashboard() {
         </div>
       </nav>
 
-      {/* Filter Controls */}
       <div className="container mx-auto px-4 py-4 flex items-center justify-between flex-wrap bg-white shadow-sm rounded-lg mt-4 max-w-6xl">
         <h2 className="text-xl font-semibold text-gray-800 flex items-center">
-          <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" /> 
+          <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
           Time Period
         </h2>
         <div className="flex space-x-2 mt-2 sm:mt-0">
@@ -204,10 +182,8 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Main Dashboard Grid */}
       <div className="container mx-auto px-4 py-6 max-w-6xl">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Balance Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:shadow-lg">
             <div className="px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white">Total Balance</h3>
@@ -223,7 +199,6 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Income Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:shadow-lg">
             <div className="px-6 py-4 bg-gradient-to-r from-green-500 to-emerald-600 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white">Total Income</h3>
@@ -237,7 +212,6 @@ function Dashboard() {
             </div>
           </div>
 
-          {/* Expenses Card */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden transform transition-all hover:shadow-lg">
             <div className="px-6 py-4 bg-gradient-to-r from-red-500 to-rose-600 flex justify-between items-center">
               <h3 className="text-lg font-semibold text-white">Total Expenses</h3>
@@ -252,88 +226,70 @@ function Dashboard() {
           </div>
         </div>
 
-        {/* Charts & Breakdown Section */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-8">
-          {/* Expense Breakdown Pie Chart */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden md:col-span-5">
             <div className="px-6 py-4 bg-gray-50 border-b flex items-center">
               <ChartBarIcon className="h-5 w-5 mr-2 text-indigo-600" />
               <h3 className="font-semibold text-gray-700">Expense Breakdown</h3>
             </div>
-            <div className="p-4 h-80">
-              {pieData.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={pieData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="value"
-                      label={({ name, percent }) => 
-                        `${name}: ${(percent * 100).toFixed(0)}%`
-                      }
-                    >
-                      {pieData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      formatter={(value) => [formatCurrency(value), "Amount"]}
-                    />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="h-full flex items-center justify-center">
-                  <p className="text-gray-500">No expense data available</p>
+            <div className="p-4 h-80 flex items-center justify-center">
+              {Object.keys(categorySummary).length > 0 ? (
+                <div className="text-center">
+                  <p className="text-gray-600 font-medium mb-2">Category distribution (by amount):</p>
+                  <ul className="list-disc list-inside text-left mx-auto max-w-xs">
+                    {Object.entries(categorySummary).map(([name, value], index) => (
+                      <li key={name} className="flex items-center text-gray-800">
+                        <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                        {name}: {formatCurrency(value)}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-sm text-gray-500 mt-4">For a visual chart, please consider a charting library.</p>
                 </div>
+              ) : (
+                <p className="text-gray-500">No expense data available for this period.</p>
               )}
             </div>
           </div>
 
-          {/* Category Breakdown List */}
           <div className="bg-white rounded-xl shadow-md overflow-hidden md:col-span-7">
             <div className="px-6 py-4 bg-gray-50 border-b flex items-center">
               <TagIcon className="h-5 w-5 mr-2 text-indigo-600" />
               <h3 className="font-semibold text-gray-700">Detailed Category Breakdown</h3>
             </div>
             <div className="p-4 overflow-auto max-h-80">
-              {pieData.length > 0 ? (
+              {Object.keys(categorySummary).length > 0 ? (
                 <div className="divide-y divide-gray-100">
-                  {pieData.map((category, index) => (
-                    <div key={category.name} className="grid grid-cols-2 py-3 px-2 hover:bg-gray-50 rounded-lg">
+                  {Object.entries(categorySummary).map(([category, value], index) => (
+                    <div key={category} className="grid grid-cols-2 py-3 px-2 hover:bg-gray-50 rounded-lg">
                       <div>
                         <span className="flex items-center">
                           <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                          <span className="font-medium text-gray-800">{category.name}</span>
+                          <span className="font-medium text-gray-800">{category}</span>
                         </span>
                       </div>
                       <div className="text-right font-semibold text-gray-700">
-                        {formatCurrency(category.value)}
+                        {formatCurrency(value)}
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-gray-500">No categories to display</p>
+                  <p className="text-gray-500">No categories to display for this period.</p>
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Recent Transactions Section */}
         <div className="bg-white rounded-xl shadow-md overflow-hidden mt-8">
           <div className="px-6 py-4 bg-gray-50 border-b flex justify-between items-center">
             <h3 className="font-semibold text-gray-700 flex items-center">
               <CalendarIcon className="h-5 w-5 mr-2 text-indigo-600" />
               Recent Transactions
             </h3>
-            <NavLink 
+            <NavLink
               to="/transactions"
               className="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
             >
@@ -360,7 +316,7 @@ function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {transactions.slice(0, 5).map((transaction, index) => (
+                  {filteredTransactions.slice(0, 5).map((transaction, index) => (
                     <tr key={index} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(transaction.date).toLocaleDateString()}
@@ -382,7 +338,7 @@ function Dashboard() {
               </table>
             ) : (
               <div className="text-center py-8">
-                <p className="text-gray-500">No transactions to display</p>
+                <p className="text-gray-500">No transactions to display for this period.</p>
               </div>
             )}
           </div>
